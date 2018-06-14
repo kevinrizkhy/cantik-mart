@@ -1,7 +1,6 @@
 package home
 
 import (
-	config "github.com/wellcode/pardev/proposal/config"
 	"html/template"
 	"net/http"
 )
