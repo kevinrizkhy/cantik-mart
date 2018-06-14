@@ -9,7 +9,7 @@ var t *template.Template
 
 func Home(w http.ResponseWriter, r *http.Request) {
 	t, _ = template.ParseFiles(
-		"view/sign/layout.html",
+		"view/layout.html",
 	)
 	data := make(map[string]interface{})
 	t.ExecuteTemplate(w, "layout", data)
