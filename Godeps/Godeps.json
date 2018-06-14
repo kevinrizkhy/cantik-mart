@@ -1,6 +1,12 @@
 {
-	"ImportPath": "github.com/wellcode/pardev/proposal-pardev",
+	"ImportPath": "github.com/wellcode/pardev/proposal",
 	"GoVersion": "go1.8",
 	"GodepVersion": "v80",
-	"Deps": []
+	"Deps": [
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Comment": "v1.6.2",
+			"Rev": "e3702bed27f0d39777b0b37b664b6280e8ef8fbf"
+		}
+	]
 }
