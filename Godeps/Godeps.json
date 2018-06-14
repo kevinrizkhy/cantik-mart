@@ -1,0 +1,6 @@
+{
+	"ImportPath": "github.com/wellcode/pardev/proposal-pardev",
+	"GoVersion": "go1.8",
+	"GodepVersion": "v80",
+	"Deps": []
+}
