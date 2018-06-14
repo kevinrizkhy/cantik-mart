@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"github.com/gorilla/mux"
+	config "github.com/wellcode/pardev/proposal/config"
+	router "github.com/wellcode/pardev/proposal/controller/router"
 	"net/http"
 	"os"
 )
@@ -14,17 +16,15 @@ func determineListenAddress() (string, error) {
 	}
 	return ":" + port, nil
 }
-func hello(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Hello World")
-}
+
 func main() {
 	addr, err := determineListenAddress()
 	if err != nil {
-		log.Fatal(err)
+		addr = config.Base_Port
 	}
-	http.HandleFunc("/", hello)
-	log.Printf("Listening on %s...\n", addr)
-	if err := http.ListenAndServe(addr, nil); err != nil {
-		panic(err)
-	}
+	r := mux.NewRouter()
+	r.HandleFunc("/", router.Home)
+	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
+	http.Handle("/assets/", r)
+	http.ListenAndServe(addr, r)
 }
