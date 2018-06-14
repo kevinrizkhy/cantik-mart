@@ -23,7 +23,8 @@ func main() {
 		addr = config.Base_Port
 	}
 	r := mux.NewRouter()
-	r.HandleFunc("/", router.Home)
+	r.HandleFunc("/", router.Sign)
+	r.HandleFunc("/home", router.Home)
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
 	http.Handle("/assets/", r)
 	http.ListenAndServe(addr, r)

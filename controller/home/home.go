@@ -10,9 +10,8 @@ var t *template.Template
 
 func Home(w http.ResponseWriter, r *http.Request) {
 	t, _ = template.ParseFiles(
-		"view/home/home.html",
+		"view/sign/layout.html",
 	)
 	data := make(map[string]interface{})
-	data["BaseURL"] = config.Base_URL
 	t.ExecuteTemplate(w, "layout", data)
 }
