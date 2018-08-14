@@ -15,7 +15,6 @@ func ListItems(w http.ResponseWriter, r *http.Request) {
 	if session_token {
 		t, _ = template.ParseFiles(
 			"view/layout.html",
-			"view/partial/base/alert/alert.html",
 			"view/partial/table/list_items.html",
 			"view/partial/base/header/header.html",
 			"view/partial/base/navbar/navbar.html",

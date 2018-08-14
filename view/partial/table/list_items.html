@@ -1,5 +1,132 @@
 {{define "content"}}
 <link rel="stylesheet" href="/assets/css/lib/datatable/dataTables.bootstrap.min.css">
+{{if eq .role "Admin"}}
+<script type="text/javascript">
+    function marginOnKeyUp(){
+        var buy = parseInt($("#buy").val())
+        var margin = parseInt($("#margin").val())
+        if(isNaN(buy)){
+            alert("Silahkan untuk mengisi bagian \"Beli\".")
+        }else{
+            $("#sell").val(buy + (buy*margin/100)) 
+        }
+    }
+
+    function sellOnKeyUp(){
+        var buy = parseInt($("#buy").val())
+        var sell = parseInt($("#sell").val())
+        if(isNaN(buy)){
+            alert("Silahkan untuk mengisi bagian \"Beli\".")
+        }else{
+            $("#margin").val((sell-buy)/buy*100) 
+        }
+    }
+
+    function buyOnKeyUp(){
+        var buy = parseInt($("#buy").val())
+        var margin = parseInt($("#margin").val())
+        if(isNaN(margin)){
+            $("#margin").val(1)
+            $("#sell").val(buy + (buy*1/100))
+        }else{
+            $("#sell").val(buy + (buy*margin/100)) 
+        }
+    }
+</script>
+<button type="button" class="btn btn-secondary mb-1" data-toggle="modal" data-target="#create-item">
+Tambah
+</button>
+<div class="modal fade" id="create-item" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">Tambah Item</strong>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <!-- Credit Card -->
+                        <div id="pay-invoice">
+                            <div class="card-body">
+                                <!-- <div class="card-title">
+                                    <h3 class="text-center">Pay Invoice</h3>
+                                </div>
+                                <hr>-->
+                                <form action="" method="post" novalidate="novalidate">
+                                    <div class="form-group">
+                                        <label for="cc-payment" class="control-label mb-1">ID</label>
+                                        <input id="cc-pament" name="id" type="text" class="form-control" aria-required="true" aria-invalid="false" placeholder="ABCDE12345" required>
+                                    </div>
+                                    <div class="form-group has-success">
+                                        <label for="cc-name" class="control-label mb-1">Nama Barang</label>
+                                        <input id="cc-name" name="name" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="nama barang" required>
+                                        <span class="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cc-number" class="control-label mb-1">Kategori</label>
+                                        <select name="category" id="SelectLm" class="form-control-sm form-control">
+                                            <option value="0" style="text-align: center;"> - Pilih Kategori - </option>
+                                            <option value="1">Option #1</option>
+                                            <option value="2">Option #2</option>
+                                            <option value="3">Option #3</option>
+                                            <option value="4">Option #4</option>
+                                            <option value="5">Option #5</option>
+                                        </select>
+                                        <span class="help-block" data-valmsg-for="cc-number" data-valmsg-replace="true"></span>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="cc-exp" class="control-label mb-1">Beli</label>
+                                                <input id="buy" name="buy" type="tel" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="123456789" autocomplete="cc-exp" onkeyup="buyOnKeyUp()" required>
+                                                <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-1">
+                                            +
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="x_card_code" class="control-label mb-1">Margin</label>
+                                            <div class="input-group">
+                                                <input id="margin" name="margin" type="tel" class="form-control cc-cvc" value="" data-val="true" data-val-required="Please enter the security code" data-val-cc-cvc="Please enter a valid security code" autocomplete="off" placeholder="50" onkeyup="marginOnKeyUp()">
+                                            </div>
+                                        </div>
+                                        <div class="col-1">
+                                            =
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="cc-exp" class="control-label mb-1">Jual</label>
+                                                <input id="sell" name="sell" type="tel" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="123456789" autocomplete="cc-exp" required onkeyup="sellOnKeyUp()">
+                                                <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="x_card_code" class="control-label mb-1">Keterangan</label>
+                                        <textarea name="description" id="description" rows="9" placeholder="Keterangan... (Isi Jika Perlu)" class="form-control" style="margin-top: 0px; margin-bottom: 0px; height: 182px;"></textarea>
+                                        <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                                    </div>
+                                    <div>
+                                        <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
+                                        <i class="fa fa-lock fa-lg"></i>&nbsp;
+                                        <span id="payment-button-amount">Tambah</span>
+                                        <span id="payment-button-sending" style="display:none;">Menambahkan…</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}
 <div class="content mt-3">
     <div class="animated fadeIn">
         <div class="row">
@@ -22,25 +149,25 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
-                            <tfoot>
-                                <tr>
-                                    <th style="display: none;">Id</th>
-                                    <th style="display: none;">Nama</th>
-                                    <th>Kategori</th>
-                                    <th style="display: none;" >Jual</th>
-                                    <th style="display: none;">Beli</th>
-                                    <th style="display: none;">Margin</th>
-                                    <th style="display: none;">Deskripsi</th>
-                                    <th style="display: none;">Action</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
+                        <tbody></tbody>
+                        <tfoot>
+                        <tr>
+                            <th style="display: none;">Id</th>
+                            <th style="display: none;">Nama</th>
+                            <th>Kategori</th>
+                            <th style="display: none;" >Jual</th>
+                            <th style="display: none;">Beli</th>
+                            <th style="display: none;">Margin</th>
+                            <th style="display: none;">Deskripsi</th>
+                            <th style="display: none;">Action</th>
+                        </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 <script src="/assets/js/lib/data-table/datatables.min.js"></script>
 <script src="/assets/js/lib/data-table/dataTables.bootstrap.min.js"></script>
