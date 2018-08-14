@@ -1,7 +1,7 @@
 package config
 
 const (
-	Base_Folder = "github.com/kevinrizkhy/Internal/"
+	Base_Folder = "github.com/pardev/cantik-mart/"
 	Base_Port   = ":8080"
 	Base_URL    = "127.0.0.1:" + Base_Port + "/"
 

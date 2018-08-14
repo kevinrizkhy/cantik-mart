@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/gorilla/mux"
-	config "github.com/wellcode/pardev/proposal/config"
-	router "github.com/wellcode/pardev/proposal/controller/router"
-	"net/http"
+	config "github.com/pardev/cantik-mart/config"
+	router "github.com/pardev/cantik-mart/controller/router"
+	database "github.com/pardev/cantik-mart/model/db"
 	"os"
 )
 
@@ -22,10 +21,11 @@ func main() {
 	if err != nil {
 		addr = config.Base_Port
 	}
-	r := mux.NewRouter()
-	r.HandleFunc("/", router.Sign)
-	r.HandleFunc("/home", router.Home)
-	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
-	http.Handle("/assets/", r)
-	http.ListenAndServe(addr, r)
+	fmt.Println("Listening on port -> " + addr)
+	fmt.Println("Connecting to Database...")
+	database.Connect()
+	fmt.Println("Database Connected.")
+	fmt.Println("Listening....")
+	router.Routes(addr)
+
 }
