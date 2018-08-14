@@ -1,0 +1,41 @@
+User (Member + Pegawai)
+	- Daftar user
+	- Create user
+  - Update user
+  - Menonaktifkan user
+    (Untuk member ada sistem poin)
+  
+Item
+	- Daftar item
+	- Create item
+  - Update item
+  - Menonaktifkan item
+  - Scan Barcode (scan item)
+  - Promo
+  
+Transaksi
+	- Pembelian
+  		> Create PO
+      > Daftar PO
+      > Daftar tagihan
+      > Laporan Keuangan
+      		+ neraca
+          + equity
+      > Cetak INVOICE (Generate dari DB ke PDF)
+      
+  - Penjualan
+  		> Daftar Penjualan
+      > Melakukan Transaksi (Kasir)
+      		+ Ada member atau tidak
+      		+ Pilih metode pembayaran
+          + Penukaran poin
+          + Minimize billing (menggunakan cache)
+      > Cetak RECEIPT (Gnerate dari UI ke JS --> Print ke HeatPrinter)
+      > Bundling Item (Kecerdasan Bisnis)
+  		> Daftar item paling laku
+      
+  - Transfer Barang
+  		> Buat Transfer_Invoice
+  		> Buat surat jalan (kurir)
+      
+  - Retur Barang

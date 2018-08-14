@@ -1,6 +1,7 @@
-package home
+package list
 
 import (
+	item "github.com/pardev/cantik-mart/model/item"
 	sessions "github.com/pardev/cantik-mart/model/session"
 	user "github.com/pardev/cantik-mart/model/user"
 	"html/template"
@@ -9,19 +10,21 @@ import (
 
 var t *template.Template
 
-func Home(w http.ResponseWriter, r *http.Request) {
+func ListItems(w http.ResponseWriter, r *http.Request) {
 	session_token, id := sessions.CheckSession(r)
 	if session_token {
 		t, _ = template.ParseFiles(
 			"view/layout.html",
 			"view/partial/base/alert/alert.html",
-			"view/partial/base/chart/chart.html",
+			"view/partial/table/list_items.html",
 			"view/partial/base/header/header.html",
 			"view/partial/base/navbar/navbar.html",
 		)
 		data := user.GetUserDetail(id)
+		data["list_items"] = template.JS(item.GetItemList())
 		t.ExecuteTemplate(w, "layout", data)
 	} else {
 		http.Redirect(w, r, "/login", 302)
 	}
+
 }

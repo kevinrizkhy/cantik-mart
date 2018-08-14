@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/gorilla/mux"
 	home_controller "github.com/pardev/cantik-mart/controller/home"
+	list_controller "github.com/pardev/cantik-mart/controller/list"
 	sign_controller "github.com/pardev/cantik-mart/controller/sign"
 	"net/http"
 )
@@ -13,6 +14,9 @@ func Routes(addr string) {
 	r.HandleFunc("/login", login)
 	r.HandleFunc("/logout", logout)
 	r.HandleFunc("/sign", sign)
+
+	r.HandleFunc("/list/{type}", list)
+
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
 	http.Handle("/assets/", r)
 	http.ListenAndServe(addr, r)
@@ -32,4 +36,14 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 func sign(w http.ResponseWriter, r *http.Request) {
 	sign_controller.SignIn(w, r)
+}
+
+func list(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	types := vars["type"]
+	if types != "" {
+		if types == "item" {
+			list_controller.ListItems(w, r)
+		}
+	}
 }
