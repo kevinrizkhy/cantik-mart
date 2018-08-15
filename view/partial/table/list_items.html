@@ -4,11 +4,12 @@
 <script type="text/javascript">
     function marginOnKeyUp(){
         var buy = parseInt($("#buy").val())
-        var margin = parseInt($("#margin").val())
+        var margin = parseFloat($("#margin").val())
         if(isNaN(buy)){
             alert("Silahkan untuk mengisi bagian \"Beli\".")
         }else{
-            $("#sell").val(buy + (buy*margin/100)) 
+            $("#margin").val(Math.round(margin * 100) / 100)
+            $("#sell").val(Math.ceil(buy + (buy*margin/100))) 
         }
     }
 
@@ -18,7 +19,7 @@
         if(isNaN(buy)){
             alert("Silahkan untuk mengisi bagian \"Beli\".")
         }else{
-            $("#margin").val((sell-buy)/buy*100) 
+            $("#margin").val(Math.round(((sell-buy)/buy*100) * 100) / 100) 
         }
     }
 
@@ -27,10 +28,25 @@
         var margin = parseInt($("#margin").val())
         if(isNaN(margin)){
             $("#margin").val(1)
-            $("#sell").val(buy + (buy*1/100))
+            $("#sell").val(Math.ceil(buy + (buy*1/100)))
         }else{
-            $("#sell").val(buy + (buy*margin/100)) 
+            $("#sell").val(Math.ceil(buy + (buy*margin/100)))
         }
+    }
+
+    function create(){
+        $.ajax({
+            url:"/create/item",
+            method: "POST",
+            data: $("#form-create").serialize(),
+            success:function(response){
+                openAlert(response, "success", "/list/item");
+            },
+            error:function(response){
+                openAlert(response, "danger","/list/item");
+            }
+        });
+        return false;
     }
 </script>
 <button type="button" class="btn btn-secondary mb-1" data-toggle="modal" data-target="#create-item">
@@ -55,7 +71,7 @@ Tambah
                                     <h3 class="text-center">Pay Invoice</h3>
                                 </div>
                                 <hr>-->
-                                <form action="" method="post" novalidate="novalidate">
+                                <form onsubmit="return create()" method="post" id="form-create">
                                     <div class="form-group">
                                         <label for="cc-payment" class="control-label mb-1">ID</label>
                                         <input id="cc-pament" name="id" type="text" class="form-control" aria-required="true" aria-invalid="false" placeholder="ABCDE12345" required>
@@ -67,13 +83,11 @@ Tambah
                                     </div>
                                     <div class="form-group">
                                         <label for="cc-number" class="control-label mb-1">Kategori</label>
-                                        <select name="category" id="SelectLm" class="form-control-sm form-control">
+                                        <select name="category" id="SelectLm" class="form-control-sm form-control" required>
                                             <option value="0" style="text-align: center;"> - Pilih Kategori - </option>
-                                            <option value="1">Option #1</option>
-                                            <option value="2">Option #2</option>
-                                            <option value="3">Option #3</option>
-                                            <option value="4">Option #4</option>
-                                            <option value="5">Option #5</option>
+                                            {{ range $idx,$i := .list_items_category }}
+                                            <option value="{{index $.list_items_category $idx 0}}">{{index $.list_items_category $idx 1}}</option>
+                                            {{end}}
                                         </select>
                                         <span class="help-block" data-valmsg-for="cc-number" data-valmsg-replace="true"></span>
                                     </div>
@@ -81,7 +95,7 @@ Tambah
                                         <div class="col-4">
                                             <div class="form-group">
                                                 <label for="cc-exp" class="control-label mb-1">Beli</label>
-                                                <input id="buy" name="buy" type="tel" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="123456789" autocomplete="cc-exp" onkeyup="buyOnKeyUp()" required>
+                                                <input id="buy" name="buy" type="number" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="123456789" autocomplete="cc-exp" onkeyup="buyOnKeyUp()" required>
                                                 <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
                                             </div>
                                         </div>
@@ -89,9 +103,9 @@ Tambah
                                             +
                                         </div>
                                         <div class="col-2">
-                                            <label for="x_card_code" class="control-label mb-1">Margin</label>
+                                            <label for="x_card_code" class="control-label mb-1">Margin (%)</label>
                                             <div class="input-group">
-                                                <input id="margin" name="margin" type="tel" class="form-control cc-cvc" value="" data-val="true" data-val-required="Please enter the security code" data-val-cc-cvc="Please enter a valid security code" autocomplete="off" placeholder="50" onkeyup="marginOnKeyUp()">
+                                                <input id="margin" name="margin" type="number" class="form-control cc-cvc" value="" data-val="true" data-val-required="Please enter the security code" data-val-cc-cvc="Please enter a valid security code" autocomplete="off" placeholder="50" onkeyup="marginOnKeyUp()" step='0.01' min="0.00" max="100">
                                             </div>
                                         </div>
                                         <div class="col-1">
@@ -100,7 +114,7 @@ Tambah
                                         <div class="col-4">
                                             <div class="form-group">
                                                 <label for="cc-exp" class="control-label mb-1">Jual</label>
-                                                <input id="sell" name="sell" type="tel" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="123456789" autocomplete="cc-exp" required onkeyup="sellOnKeyUp()">
+                                                <input id="sell" name="sell" type="number" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="123456789" autocomplete="cc-exp" required onkeyup="sellOnKeyUp()">
                                                 <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
                                             </div>
                                         </div>

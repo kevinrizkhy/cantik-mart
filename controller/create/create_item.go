@@ -1,9 +1,11 @@
 package create
 
 import (
+	//"fmt"
 	database "github.com/pardev/cantik-mart/model/db"
 	sessions "github.com/pardev/cantik-mart/model/session"
 	"html/template"
+	"math"
 	"net/http"
 )
 
@@ -16,13 +18,16 @@ func CreateItem(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		if r.Method == "POST" {
 			id := r.FormValue("id")
-			name := r.FormValue("email")
+			name := r.FormValue("name")
 			category := r.FormValue("category")
 			buy := r.FormValue("buy")
 			sell := r.FormValue("sell")
 			margin := r.FormValue("margin")
 			description := r.FormValue("description")
 			if id != "" && name != "" && category != "" && buy != "" && sell != "" && margin != "" {
+				buy_int := strconv.ParseInt(buy, 64)
+				sell_int := strconv.ParseInt(sell, 64)
+				margin_float := strconv.Pars
 				insert_item_status := database.InsertItem(id, name, category, buy, sell, margin, description)
 				if insert_item_status {
 					msg = "Berhasil menambahkan item."

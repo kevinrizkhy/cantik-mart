@@ -21,6 +21,7 @@ func ListItems(w http.ResponseWriter, r *http.Request) {
 		)
 		data := user.GetUserDetail(id)
 		data["list_items"] = template.JS(item.GetItemList())
+		data["list_items_category"] = item.GetItemCategoryListArray()
 		t.ExecuteTemplate(w, "layout", data)
 	} else {
 		http.Redirect(w, r, "/login", 302)
