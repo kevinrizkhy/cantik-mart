@@ -35,15 +35,16 @@
     }
 
     function create(){
+        $("#close-modal-button").click();
         $.ajax({
             url:"/create/item",
             method: "POST",
             data: $("#form-create").serialize(),
             success:function(response){
-                openAlert(response, "success", "/list/item");
+                openAlert("Berhasil menambahkan item.", "success", "/list/item");
             },
             error:function(response){
-                openAlert(response, "danger","/list/item");
+                openAlert("Gagal menambahkan  item.", "danger","/list/item");
             }
         });
         return false;
@@ -59,8 +60,8 @@ Tambah
                 <div class="card">
                     <div class="card-header">
                         <strong class="card-title">Tambah Item</strong>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                        <span aria-hidden="true" id="close-modal-button">&times;</span>
                         </button>
                     </div>
                     <div class="card-body">

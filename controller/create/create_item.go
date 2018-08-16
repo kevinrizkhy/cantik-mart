@@ -1,12 +1,13 @@
 package create
 
 import (
-	//"fmt"
+	"fmt"
 	database "github.com/pardev/cantik-mart/model/db"
 	sessions "github.com/pardev/cantik-mart/model/session"
 	"html/template"
 	"math"
 	"net/http"
+	"strconv"
 )
 
 var t *template.Template
@@ -25,18 +26,21 @@ func CreateItem(w http.ResponseWriter, r *http.Request) {
 			margin := r.FormValue("margin")
 			description := r.FormValue("description")
 			if id != "" && name != "" && category != "" && buy != "" && sell != "" && margin != "" {
-				buy_int := strconv.ParseInt(buy, 64)
-				sell_int := strconv.ParseInt(sell, 64)
-				margin_float := strconv.Pars
+				buy_int, _ := strconv.Atoi(buy)
+				sell_int, _ := strconv.Atoi(sell)
+				margin_float_r, _ := strconv.ParseFloat(margin, 64)
+				margin_float := math.Ceil(margin_float_r*100) / 100
+				buy = fmt.Sprint(buy_int)
+				sell = fmt.Sprint(sell_int)
+				margin = fmt.Sprint(margin_float)
 				insert_item_status := database.InsertItem(id, name, category, buy, sell, margin, description)
 				if insert_item_status {
-					msg = "Berhasil menambahkan item."
+					w.WriteHeader(200)
 				} else {
-					msg = "Gagal menambahkan item."
+					w.WriteHeader(403)
 				}
 			} else {
 				w.WriteHeader(403)
-				msg = "Gagal menambahkan item."
 			}
 			w.Write([]byte(msg))
 		}
