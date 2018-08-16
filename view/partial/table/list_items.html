@@ -69,7 +69,7 @@ $("#edit-sell").val(Math.ceil(buy + (buy*margin/100)))
 // 
 function create(){
 $("#close-modal-button").click();
-if($("#edit-buy").val()==0){
+if($("#cat").val()==0){
 openAlert("Silahkan mengisi semua bagian.", "danger","/list/item");
 return false;
 }else{
@@ -90,6 +90,10 @@ return false;
 // 
 function edit(){
 $("#close-modal-button-edit").click();
+if($("#edit-cat").val()==0){
+openAlert("Silahkan mengisi semua bagian.", "danger","/list/item");
+return false;
+}else{
 $.ajax({
 url:"/edit/item",
 method: "POST",
@@ -102,6 +106,7 @@ openAlert("Gagal mengubah item.", "danger","/list/item");
 }
 });
 return false;
+}
 }
 //
 function deletes(){
@@ -463,14 +468,9 @@ Tambah
 $(document).ready(function() {
 $('#bootstrap-data-table').DataTable( {
 data: {{.list_items}},
-<<<<<<< HEAD
-"scrollY": 400,
+"scrollY": 300,
 destroy: true,
-=======
-"scrollY": 250,
->>>>>>> e7f6a2790def3e3cf4732ba1ef8335dc58cc812a
 "scrollX": true,
-destroy: true,
 columns:[{title:"Id"},{title:"Name"},{title:"Kategori"},{title:"Beli"},{title:"Jual"},{title:"Margin"},{title:"Deskripsi"},{title:"Action"}],
 initComplete: function () {
 this.api().columns().every( function () {

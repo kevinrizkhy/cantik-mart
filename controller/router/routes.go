@@ -1,6 +1,7 @@
 package router
 
 import (
+	//"fmt"
 	"github.com/gorilla/mux"
 	create_controller "github.com/pardev/cantik-mart/controller/create"
 	home_controller "github.com/pardev/cantik-mart/controller/home"
