@@ -3,13 +3,13 @@ package utility
 import (
 	"crypto/md5"
 	"encoding/hex"
-	config "github.com/wellcode/LCWB/-/config"
+	//config "github.com/pardev/cantik-mart/config"
 	"time"
 )
 
 func GenerateToken(email string) string {
 
-	newstring := email + GetTime() + config.SENDER
+	newstring := email + GetTime()
 	return GetMD5Hash(newstring)
 }
 

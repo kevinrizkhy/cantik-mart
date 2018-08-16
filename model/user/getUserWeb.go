@@ -2,7 +2,7 @@ package user
 
 import (
 	"fmt"
-	database "github.com/wellcode/LCWB/-/model/db"
+	database "github.com/pardev/cantik-mart/model/db"
 )
 
 func GetUserWebListMap(session string) map[int](map[string]string) {

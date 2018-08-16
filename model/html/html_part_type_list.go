@@ -2,7 +2,7 @@ package html
 
 import (
 	"fmt"
-	database "github.com/wellcode/LCWB/-/model/db"
+	database "github.com/pardev/cantik-mart/model/db"
 )
 
 func GetHTMLPartTypeMap() map[int](map[string]string) {

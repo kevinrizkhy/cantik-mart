@@ -47,6 +47,10 @@ func list(w http.ResponseWriter, r *http.Request) {
 	if types != "" {
 		if types == "item" {
 			list_controller.ListItems(w, r)
+		} else if types == "user" {
+			list_controller.ListUser(w, r)
+		} else if types == "store" {
+			list_controller.ListStore(w, r)
 		}
 	}
 }
@@ -57,6 +61,11 @@ func create(w http.ResponseWriter, r *http.Request) {
 	if types != "" {
 		if types == "item" {
 			create_controller.CreateItem(w, r)
+		} else if types == "user" {
+			create_controller.CreateUser(w, r)
+		} else if types == "store" {
+			create_controller.CreateStore(w, r)
 		}
+
 	}
 }

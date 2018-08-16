@@ -1,8 +1,8 @@
 package html
 
 import (
-	config "github.com/wellcode/LCWB/-/config"
-	file "github.com/wellcode/LCWB/-/model/file"
+	config "github.com/pardev/cantik-mart/config"
+	file "github.com/pardev/cantik-mart/model/file"
 	"html/template"
 	"net/http"
 	"strings"
