@@ -25,8 +25,7 @@ func GetItemList() string {
 		js_str := "["
 		for i := 0; i < len(rows); i++ {
 			js_str += "['"
-			js_str += rows[i]["id"] + "','" + rows[i]["name"] + "','" + rows[i]["category"] + "','" + rows[i]["buy"] + "','" + rows[i]["sell"] + "','" + rows[i]["margin"] + "','" + rows[i]["description"]
-			js_str += "','<button onclick=\"detailItem(this)\" class=\"btn btn-info\">Detail</button>&nbsp&nbsp&nbsp<button onclick=\"editItem(this)\" class=\"btn btn-warning\">Edit</button>&nbsp&nbsp&nbsp<button onclick=\"deleteItem(this)\" class=\"btn btn-danger\">Delete</button>']"
+			js_str += rows[i]["id"] + "','" + rows[i]["name"] + "','" + rows[i]["category"] + "','" + rows[i]["buy"] + "','" + rows[i]["sell"] + "','" + rows[i]["margin"] + "','" + rows[i]["description"] + "','<button onclick=\"detailItem(this)\" class=\"btn btn-info\"><i class=\"fa fa-info-circle\"></i></button>&nbsp&nbsp&nbsp<button onclick=\"editItem(this)\" class=\"btn btn-warning\"><i class=\"fa fa-pencil-square-o\"></i></button>&nbsp&nbsp&nbsp<button onclick=\"deleteItem(this)\" class=\"btn btn-danger\"><i class=\"fa fa-trash-o\"></i></button>']"
 			if (i + 1) != len(rows) {
 				js_str += ","
 			}

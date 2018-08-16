@@ -5,7 +5,9 @@ import (
 	create_controller "github.com/pardev/cantik-mart/controller/create"
 	home_controller "github.com/pardev/cantik-mart/controller/home"
 	list_controller "github.com/pardev/cantik-mart/controller/list"
+	delete_controller "github.com/pardev/cantik-mart/controller/remove"
 	sign_controller "github.com/pardev/cantik-mart/controller/sign"
+	update_controller "github.com/pardev/cantik-mart/controller/update"
 	"net/http"
 )
 
@@ -19,6 +21,8 @@ func Routes(addr string) {
 	r.HandleFunc("/list/{type}", list)
 
 	r.HandleFunc("/create/{type}", create)
+	r.HandleFunc("/edit/{type}", edit)
+	r.HandleFunc("/delete/{type}", deleteFunc)
 
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
 	http.Handle("/assets/", r)
@@ -57,6 +61,26 @@ func create(w http.ResponseWriter, r *http.Request) {
 	if types != "" {
 		if types == "item" {
 			create_controller.CreateItem(w, r)
+		}
+	}
+}
+
+func edit(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	types := vars["type"]
+	if types != "" {
+		if types == "item" {
+			update_controller.UpdateItem(w, r)
+		}
+	}
+}
+
+func deleteFunc(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	types := vars["type"]
+	if types != "" {
+		if types == "item" {
+			delete_controller.DeleteItem(w, r)
 		}
 	}
 }
