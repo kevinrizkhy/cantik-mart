@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="/assets/css/lib/datatable/dataTables.bootstrap.min.css">
 {{if eq .role "Admin"}}
 <script type="text/javascript">
+//    
 function marginOnKeyUp(){
 var buy = parseInt($("#buy").val())
 var margin = parseFloat($("#margin").val())
@@ -12,6 +13,7 @@ $("#margin").val(Math.round(margin * 100) / 100)
 $("#sell").val(Math.ceil(buy + (buy*margin/100)))
 }
 }
+// 
 function sellOnKeyUp(){
 var buy = parseInt($("#buy").val())
 var sell = parseInt($("#sell").val())
@@ -21,6 +23,7 @@ alert("Silahkan untuk mengisi bagian \"Beli\".")
 $("#margin").val(Math.round(((sell-buy)/buy*100) * 100) / 100)
 }
 }
+// 
 function buyOnKeyUp(){
 var buy = parseInt($("#buy").val())
 var margin = parseInt($("#margin").val())
@@ -31,6 +34,7 @@ $("#sell").val(Math.ceil(buy + (buy*1/100)))
 $("#sell").val(Math.ceil(buy + (buy*margin/100)))
 }
 }
+// 
 function marginEditOnKeyUp(){
 var buy = parseInt($("#edit-buy").val())
 var margin = parseFloat($("#edit-margin").val())
@@ -41,7 +45,8 @@ $("#edit-margin").val(Math.round(margin * 100) / 100)
 $("#edit-sell").val(Math.ceil(buy + (buy*margin/100)))
 }
 }
-function sellOnKeyUp(){
+// 
+function sellEditOnKeyUp(){
 var buy = parseInt($("#edit-buy").val())
 var sell = parseInt($("#edit-sell").val())
 if(isNaN(buy)){
@@ -50,7 +55,8 @@ alert("Silahkan untuk mengisi bagian \"Beli\".")
 $("#edit-margin").val(Math.round(((sell-buy)/buy*100) * 100) / 100)
 }
 }
-function buyOnKeyUp(){
+// 
+function buyEditOnKeyUp(){
 var buy = parseInt($("#edit-buy").val())
 var margin = parseInt($("#edit-margin").val())
 if(isNaN(margin)){
@@ -60,8 +66,13 @@ $("#edit-sell").val(Math.ceil(buy + (buy*1/100)))
 $("#edit-sell").val(Math.ceil(buy + (buy*margin/100)))
 }
 }
+// 
 function create(){
 $("#close-modal-button").click();
+if($("#edit-buy").val()==0){
+openAlert("Silahkan mengisi semua bagian.", "danger","/list/item");
+return false;
+}else{
 $.ajax({
 url:"/create/item",
 method: "POST",
@@ -75,7 +86,8 @@ openAlert("Gagal menambahkan  item.", "danger","/list/item");
 });
 return false;
 }
-
+}
+// 
 function edit(){
 $("#close-modal-button-edit").click();
 $.ajax({
@@ -91,8 +103,10 @@ openAlert("Gagal mengubah item.", "danger","/list/item");
 });
 return false;
 }
-
+//
 function deletes(){
+var r = confirm("Apakah anda akan menghapus (" +document.getElementById("delete-id").value+" - "+document.getElementById("delete-name").value +") ?" );
+if (r == true) {
 $("#close-modal-button-delete").click();
 $.ajax({
 url:"/delete/item",
@@ -107,7 +121,8 @@ openAlert("Gagal menghapus item.", "danger","/list/item");
 });
 return false;
 }
-
+}
+//
 function editItem(rows){
 id = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(0).innerHTML;
 name = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(1).innerHTML;
@@ -131,7 +146,7 @@ break;
 }
 $("#button-edit-item").click();
 }
-
+//
 function deleteItem(rows){
 id = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(0).innerHTML;
 name = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(1).innerHTML;
@@ -147,10 +162,9 @@ break;
 }
 $("#button-delete-item").click();
 }
-
+//
 function detailItem(rows){
 id = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(0).innerHTML;
-alert(id)
 }
 </script>
 <button type="button" class="btn btn-secondary mb-1" data-toggle="modal" data-target="#create-item">
@@ -158,6 +172,7 @@ Tambah
 </button>
 <button type="button" class="btn btn-secondary mb-1" data-toggle="modal" data-target="#edit-item" id="button-edit-item" style="display: none;" hidden></button>
 <button type="button" class="btn btn-secondary mb-1" data-toggle="modal" data-target="#delete-item" id="button-delete-item" style="display: none;" hidden></button>
+<!-- CREATE MODAL FORM -->
 <div class="modal fade" id="create-item" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -246,7 +261,7 @@ Tambah
         </div>
     </div>
 </div>
-
+<!-- EDIT MODAL FORM -->
 <div class="modal fade" id="edit-item" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true" >
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -279,7 +294,7 @@ Tambah
                                     <div class="form-group">
                                         <label for="cc-number" class="control-label mb-1">Kategori</label>
                                         <select name="category" id="edit-cat" class="form-control-sm form-control" required>
-                                            <option value="0" style="text-align: center;"> - Pilih Kategori - </option>
+                                            <option value="0" style="text-align: center;" disabled selected> - Pilih Kategori - </option>
                                             {{ range $idx,$i := .list_items_category }}
                                             <option value="{{index $.list_items_category $idx 0}}">{{index $.list_items_category $idx 1}}</option>
                                             {{end}}
@@ -290,7 +305,7 @@ Tambah
                                         <div class="col-4">
                                             <div class="form-group">
                                                 <label for="cc-exp" class="control-label mb-1">Beli</label>
-                                                <input id="edit-buy" name="buy" type="number" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="123456789" autocomplete="cc-exp" onkeyup="buyOnKeyUp()" required>
+                                                <input id="edit-buy" name="buy" type="number" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="123456789" autocomplete="cc-exp" onkeyup="buyEditOnKeyUp()" required>
                                                 <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
                                             </div>
                                         </div>
@@ -300,7 +315,7 @@ Tambah
                                         <div class="col-2">
                                             <label for="x_card_code" class="control-label mb-1">Margin (%)</label>
                                             <div class="input-group">
-                                                <input id="edit-margin" name="margin" type="number" class="form-control cc-cvc" value="" data-val="true" data-val-required="Please enter the security code" data-val-cc-cvc="Please enter a valid security code" autocomplete="off" placeholder="50" onkeyup="marginOnKeyUp()" step='0.01' min="0.00" max="100">
+                                                <input id="edit-margin" name="margin" type="number" class="form-control cc-cvc" value="" data-val="true" data-val-required="Please enter the security code" data-val-cc-cvc="Please enter a valid security code" autocomplete="off" placeholder="50" onkeyup="marginEditOnKeyUp()" step='0.01' min="0.00" max="100">
                                             </div>
                                         </div>
                                         <div class="col-1">
@@ -309,7 +324,7 @@ Tambah
                                         <div class="col-4">
                                             <div class="form-group">
                                                 <label for="cc-exp" class="control-label mb-1">Jual</label>
-                                                <input id="edit-sell" name="sell" type="number" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="123456789" autocomplete="cc-exp" required onkeyup="sellOnKeyUp()">
+                                                <input id="edit-sell" name="sell" type="number" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="123456789" autocomplete="cc-exp" required onkeyup="sellEditOnKeyUp()">
                                                 <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
                                             </div>
                                         </div>
@@ -335,7 +350,7 @@ Tambah
         </div>
     </div>
 </div>
-
+<!-- DELETE MODAL FORM -->
 <div class="modal fade" id="delete-item" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true" >
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -368,7 +383,6 @@ Tambah
                                     <div class="form-group">
                                         <label for="cc-number" class="control-label mb-1">Kategori</label>
                                         <select name="category" id="delete-cat" class="form-control-sm form-control" required readonly>
-                                            <option value="0" style="text-align: center;"> - Pilih Kategori - </option>
                                             {{ range $idx,$i := .list_items_category }}
                                             <option value="{{index $.list_items_category $idx 0}}">{{index $.list_items_category $idx 1}}</option>
                                             {{end}}

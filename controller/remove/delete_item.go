@@ -1,7 +1,6 @@
 package remove
 
 import (
-	"fmt"
 	database "github.com/pardev/cantik-mart/model/db"
 	sessions "github.com/pardev/cantik-mart/model/session"
 	"html/template"
