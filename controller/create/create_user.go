@@ -18,7 +18,6 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	if session_token {
 		r.ParseForm()
 		if r.Method == "POST" {
-			id := r.FormValue("id")
 			name := r.FormValue("name")
 			email := r.FormValue("email")
 			address := r.FormValue("address")
@@ -26,8 +25,8 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 			role := r.FormValue("role")
 			store := r.FormValue("store")
 			password := r.FormValue("password")
-			if id != "" && name != "" && email != "" && address != "" && phone != "" && password != "" && role != "" && store != "" {
-				insert_user_status := database.InsertUser(id, name, email, address, phone, role, store, password)
+			if name != "" && email != "" && address != "" && phone != "" && password != "" && role != "" && store != "" {
+				insert_user_status := database.InsertUser(name, email, address, phone, role, store, password)
 				if insert_user_status {
 					w.WriteHeader(200)
 				} else {

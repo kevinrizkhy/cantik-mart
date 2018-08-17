@@ -12,7 +12,7 @@ success:function(response){
 openAlert("Berhasil menambahkan user.", "success", "/list/user");
 },
 error:function(response){
-openAlert("Gagal menambahkan  user.", "danger","/list/user");
+openAlert("Gagal menambahkan user.", "danger","/list/user");
 }
 });
 return false;
@@ -36,10 +36,6 @@ Tambah
                         <div id="pay-invoice">
                             <div class="card-body">
                                 <form onsubmit="return create()" method="post" id="form-create">
-                                    <div class="form-group">
-                                        <label for="cc-payment" class="control-label mb-1">ID</label>
-                                        <input id="cc-pament" name="id" type="text" class="form-control" aria-required="true" aria-invalid="false" placeholder="123" required>
-                                    </div>
                                     <div class="form-group has-success">
                                         <label for="cc-name" class="control-label mb-1">Nama</label>
                                         <input id="cc-name" name="name" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="nama" required>
@@ -52,11 +48,15 @@ Tambah
                                         <span class="help-block" data-valmsg-for="cc-number" data-valmsg-replace="true"></span>
                                     </div>
                                     <div class="form-group">
+                                        <label for="cc-exp" class="control-label mb-1">Kata Sandi</label>
+                                        <input id="password" name="password" type="password" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="" autocomplete="cc-exp" required>
+                                        <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                                    </div>
+                                    <div class="form-group">
                                         <label for="cc-exp" class="control-label mb-1">Alamat</label>
                                         <input id="address" name="address" type="text" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="alamat" autocomplete="cc-exp" required>
                                         <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
                                     </div>
-                                    
                                     <div class="form-group">
                                         <label for="x_card_code" class="control-label mb-1">No Handphone </label>
                                         <div class="input-group">
@@ -83,12 +83,6 @@ Tambah
                                             <option value="{{index $.list_store $idx 0}}">{{index $.list_store $idx 1}}</option>
                                             {{end}}
                                         </select>
-                                        <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="x_card_code" class="control-label mb-1">Password</label>
-                                        <textarea name="password" id="password" type="password" placeholder="*****" class="form-control" style="margin-top: 0px; margin-bottom: 0px; height: 182px;"></textarea>
                                         <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
                                     </div>
                                     <div>
