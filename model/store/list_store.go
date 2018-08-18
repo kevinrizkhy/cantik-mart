@@ -28,8 +28,14 @@ func GetStore() [][]string {
 			name := fmt.Sprint(rows[i]["name"])
 			address := fmt.Sprint(rows[i]["address"])
 			phone := fmt.Sprint(rows[i]["phone"])
-			button := fmt.Sprint("<button onclick=\"detailUser(this)\" class=\"btn btn-info\">Detail</button>&nbsp&nbsp&nbsp<button onclick=\"editUser(this)\" class=\"btn btn-warning\">Edit</button>&nbsp&nbsp&nbsp<button onclick=\"deleteUser(this)\" class=\"btn btn-danger\">Delete</button>")
-			temp := []string{id, name, address, phone, button}
+			status := fmt.Sprint(rows[i]["status"])
+			if status == "true" {
+				status = "Aktif"
+			} else {
+				status = "Tidak Aktif"
+			}
+			button := fmt.Sprint("<button onclick=\"location.href = '/detail/store?id=" + id + "';\" class=\"btn btn-info\">Detail</button>&nbsp&nbsp&nbsp<button onclick=\"editStore(this)\" class=\"btn btn-warning\">Edit</button>")
+			temp := []string{id, name, address, phone, status, button}
 			result = append(result, temp)
 		}
 		return result

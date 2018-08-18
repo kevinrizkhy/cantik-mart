@@ -19,7 +19,6 @@ func ListStore(w http.ResponseWriter, r *http.Request) {
 			"view/partial/base/navbar/navbar.html",
 		)
 		data := user.GetUserDetail(id)
-		//data["list_store"] = template.JS(store.GetStore())
 		data["list_store"] = store.GetStore()
 		t.ExecuteTemplate(w, "layout", data)
 	} else {

@@ -17,10 +17,73 @@ openAlert("Gagal menambahkan user.", "danger","/list/user");
 });
 return false;
 }
+//EDIT
+function edit(){
+$("#close-modal-button-edit").click();
+if(($("#edit-role").val()==0)||($("#edit-store").val()==0)){
+openAlert("Silahkan mengisi semua bagian.", "danger","/list/user");
+return false;
+}else{
+$.ajax({
+url:"/edit/user",
+method: "POST",
+data: $("#form-edit").serialize(),
+success:function(response){
+openAlert("Berhasil mengubah item.", "success", "/list/user");
+},
+error:function(response){
+openAlert("Gagal mengubah item.", "danger","/list/user");
+}
+});
+return false;
+}
+}
+//
+function editUser(rows){
+id = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(0).innerHTML;
+name = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(1).innerHTML;
+email = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(2).innerHTML;
+address = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(3).innerHTML;
+phone = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(4).innerHTML;
+role = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(5).innerHTML;
+store = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(6).innerHTML;
+status = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(7).innerHTML;
+$("#edit-id").val(id);
+$("#edit-name").val(name);
+$("#edit-email").val(email);
+$("#edit-address").val(address);
+$("#edit-phone").val(phone);
+var dd = document.getElementById('edit-role');
+for (var i = 0; i < dd.options.length; i++) {
+if (dd.options[i].text === role) {
+dd.selectedIndex = i;
+break;
+}
+}
+var ee = document.getElementById('edit-store');
+for (var i = 0; i < ee.options.length; i++) {
+if (ee.options[i].text === store) {
+ee.selectedIndex = i;
+break;
+}
+}
+var ff = document.getElementById('edit-status');
+for (var i = 0; i < ff.options.length; i++) {
+if (ff.options[i].text === status) {
+ff.selectedIndex = i;
+break;
+}
+}
+$("#button-edit-user").click();
+}
 </script>
+<!-- Button -->
 <button type="button" class="btn btn-secondary mb-1" data-toggle="modal" data-target="#create-user">
 Tambah
 </button>
+<button type="button" class="btn btn-secondary mb-1" data-toggle="modal" data-target="#edit-user" id="button-edit-user" style="display: none;" hidden></button>
+<!-- MODAL -->
+<!-- CREATE -->
 <div class="modal fade" id="create-user" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -29,7 +92,7 @@ Tambah
                     <div class="card-header">
                         <strong class="card-title">Tambah User</strong>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
-                        <span aria-hidden="true" id="close-modal-button">&times;</span>
+                        <span aria-hidden="true" id="close-modal-create">&times;</span>
                         </button>
                     </div>
                     <div class="card-body">
@@ -86,10 +149,100 @@ Tambah
                                         <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
                                     </div>
                                     <div>
-                                        <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
+                                        <button id="create-button" type="submit" class="btn btn-lg btn-info btn-block">
                                         <i class="fa fa-lock fa-lg"></i>&nbsp;
                                         <span id="payment-button-amount">Tambah</span>
                                         <span id="payment-button-sending" style="display:none;">Menambahkan…</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- EDIT -->
+<div class="modal fade" id="edit-user" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">Ubah User</strong>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                        <span aria-hidden="true" id="close-modal-button-edit">&times;</span>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="pay-invoice">
+                            <div class="card-body">
+                                <form onsubmit="return edit()" method="post" id="form-edit">
+                                    <div class="form-group has-success">
+                                        <label for="cc-name" class="control-label mb-1">ID</label>
+                                        <input id="edit-id" name="id" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="nama" required readonly>
+                                        <span class="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
+                                    </div>
+                                    <div class="form-group has-success">
+                                        <label for="cc-name" class="control-label mb-1">Nama</label>
+                                        <input id="edit-name" name="name" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="nama" required>
+                                        <span class="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="cc-number" class="control-label mb-1">Email</label>
+                                        <input id="edit-email" name="email" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="email" required>
+                                        <span class="help-block" data-valmsg-for="cc-number" data-valmsg-replace="true"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cc-exp" class="control-label mb-1">Alamat</label>
+                                        <input id="edit-address" name="address" type="text" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="alamat" autocomplete="cc-exp" required>
+                                        <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="x_card_code" class="control-label mb-1">No Handphone </label>
+                                        <div class="input-group">
+                                            <input id="edit-phone" name="phone" type="tel" class="form-control cc-cvc" value="" data-val="true" data-val-required="Please enter the security code" data-val-cc-cvc="Please enter a valid security code" autocomplete="off" placeholder="0812345678" >
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="cc-exp" class="control-label mb-1">Peran</label>
+                                        <select name="role" id="edit-role" class="form-control-sm form-control" required>
+                                            <option value="0" style="text-align: center;"> - Pilih Peran - </option>
+                                            {{ range $idx,$i := .list_user_role }}
+                                            <option value="{{index $.list_user_role $idx 0}}">{{index $.list_user_role $idx 1}}</option>
+                                            {{end}}
+                                        </select>
+                                        <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="cc-exp" class="control-label mb-1">Toko</label>
+                                        <select name="store" id="edit-store" class="form-control-sm form-control" required>
+                                            <option value="0" style="text-align: center;"> - Pilih Toko - </option>
+                                            {{ range $idx,$i := .list_store }}
+                                            <option value="{{index $.list_store $idx 0}}">{{index $.list_store $idx 1}}</option>
+                                            {{end}}
+                                        </select>
+                                        <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cc-exp" class="control-label mb-1">Status</label>
+                                        <select name="status" id="edit-status" class="form-control-sm form-control" style="font-weight: bold;" required>
+                                            <option value="true" style="font-weight: bold;color: green;"> Aktif </option>
+                                            <option value="false" style="font-weight: bold;color: red;"> Tidak Aktif </option>
+                                        </select>
+                                        <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                                    </div>
+                                    
+                                    <div>
+                                        <button id="edit-button" type="submit" class="btn btn-lg btn-info btn-block">
+                                        <i class="fa fa-lock fa-lg"></i>&nbsp;
+                                        <span id="payment-button-amount">Ubah</span>
+                                        <span id="payment-button-sending" style="display:none;">Mengubah...</span>
                                         </button>
                                     </div>
                                 </form>
@@ -121,6 +274,7 @@ Tambah
                                     <th>No HP</th>
                                     <th>Role</th>
                                     <th>Store</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -129,11 +283,12 @@ Tambah
                         <tr>
                             <th style="display: none;">Id</th>
                             <th style="display: none;">Nama</th>
+                            <th style="display: none;">Email</th>
+                            <th style="display: none;">Alamat</th>
+                            <th style="display: none;">No HP</th>
                             <th>Role</th>
-                            <th style="display: none;" >Jual</th>
-                            <th style="display: none;">Beli</th>
-                            <th style="display: none;">Margin</th>
-                            <th style="display: none;">Deskripsi</th>
+                            <th>Store</th>
+                            <th>Status</th>
                             <th style="display: none;">Action</th>
                         </tr>
                         </tfoot>
@@ -162,7 +317,7 @@ data: {{.list_user}},
 "scrollY": 400,
 destroy: true,
 "scrollX": true,
-columns:[{title:"Id"},{title:"Name"},{title:"Email"},{title:"Address"},{title:"Phone"},{title:"Role"},{title:"Store"},{title:"Action"}],
+columns:[{title:"Id"},{title:"Name"},{title:"Email"},{title:"Address"},{title:"Phone"},{title:"Role"},{title:"Store"},{title:"Status"},{title:"Action"}],
 initComplete: function () {
 this.api().columns().every( function () {
 var column = this;
