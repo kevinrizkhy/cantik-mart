@@ -7,24 +7,19 @@ import (
 	"net/http"
 )
 
-//var t *template.Template
-
-func CreateUser(w http.ResponseWriter, r *http.Request) {
+func CreateSupplier(w http.ResponseWriter, r *http.Request) {
 	msg := ""
 	session_token, _ := sessions.CheckSession(r)
 	if session_token {
 		r.ParseForm()
 		if r.Method == "POST" {
 			name := r.FormValue("name")
-			email := r.FormValue("email")
 			address := r.FormValue("address")
 			phone := r.FormValue("phone")
-			role := r.FormValue("role")
-			store := r.FormValue("store")
-			password := r.FormValue("password")
-			if name != "" && email != "" && address != "" && phone != "" && password != "" && role != "" && store != "" {
-				insert_user_status := database.InsertUser(name, email, address, phone, role, store, password)
-				if insert_user_status {
+			description := r.FormValue("description")
+			if name != "" && address != "" && phone != "" && description != "" {
+				insert_supplier_status := database.InsertSupplier(name, address, phone, description)
+				if insert_supplier_status {
 					w.WriteHeader(200)
 				} else {
 					w.WriteHeader(403)

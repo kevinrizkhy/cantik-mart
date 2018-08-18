@@ -56,6 +56,10 @@ func list(w http.ResponseWriter, r *http.Request) {
 			list_controller.ListUser(w, r)
 		} else if types == "store" {
 			list_controller.ListStore(w, r)
+		} else if types == "order" {
+			list_controller.ListOrder(w, r)
+		} else if types == "supplier" {
+			list_controller.ListSupplier(w, r)
 		}
 	}
 }
@@ -70,6 +74,10 @@ func create(w http.ResponseWriter, r *http.Request) {
 			create_controller.CreateUser(w, r)
 		} else if types == "store" {
 			create_controller.CreateStore(w, r)
+		} else if types == "order" {
+			create_controller.CreateOrder(w, r)
+		} else if types == "supplier" {
+			create_controller.CreateSupplier(w, r)
 		}
 
 	}
