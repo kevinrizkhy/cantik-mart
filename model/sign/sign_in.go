@@ -8,8 +8,8 @@ import (
 	"net/http"
 )
 
-func Login(w http.ResponseWriter, r *http.Request, email string, password string) bool {
-	rows, err := database.ExecuteQuery("SELECT * from t_user where email=$1 and password=$2", email, password)
+func Login(w http.ResponseWriter, r *http.Request, email, password string) bool {
+	rows, err := database.ExecuteQuery("SELECT * from t_user left join t_store on t_user.store=t_store.id where email=$1 and password=$2 and t_user.status=$3 and t_store.status=$4", email, password, true, true)
 	if len(rows) > 0 && err == nil {
 		sessionToken := utility.GenerateToken(email + password)
 		sessions.SetSession(w, r, sessionToken)

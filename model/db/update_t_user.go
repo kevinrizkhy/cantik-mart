@@ -4,12 +4,13 @@ import (
 	"fmt"
 )
 
-func UpdateUserDetail(id, name, phone, address, company, email, password, role string) error {
-	_, err := ExecuteQuery("UPDATE t_user SET name=$1, phone=$2, address=$3, company=$4 WHERE id=$5;", name, phone, address, company, id)
+func UpdateUserDetail(id, name, email, address, phone, role, store, status string) bool {
+	_, err := ExecuteQuery("UPDATE t_user SET email=$1, name=$2, address=$3, phone=$4,role=$5,store=$6,status=$7 WHERE id=$8;", name, email, address, phone, role, store, status, id)
 	if err != nil {
 		fmt.Println("Err : UpdateUser - ", err)
+		return false
 	}
-	return err
+	return true
 }
 
 func UpdateUserSession(session_token, email, password string) error {

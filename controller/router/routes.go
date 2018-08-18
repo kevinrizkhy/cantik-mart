@@ -89,6 +89,10 @@ func edit(w http.ResponseWriter, r *http.Request) {
 	if types != "" {
 		if types == "item" {
 			update_controller.UpdateItem(w, r)
+		} else if types == "user" {
+			update_controller.UpdateUser(w, r)
+		} else if types == "store" {
+			update_controller.UpdateStore(w, r)
 		}
 	}
 }
@@ -99,6 +103,7 @@ func deleteFunc(w http.ResponseWriter, r *http.Request) {
 	if types != "" {
 		if types == "item" {
 			delete_controller.DeleteItem(w, r)
+		} else if types == "store" {
 		}
 	}
 }
