@@ -9,7 +9,6 @@ import (
 )
 
 func ListUser(w http.ResponseWriter, r *http.Request) {
-	var t *template.Template
 	session_token, id := sessions.CheckSession(r)
 	if session_token {
 		t, _ = template.ParseFiles(

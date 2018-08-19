@@ -18,10 +18,18 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-inbox"></i>Barang</a>
                     <ul class="sub-menu children dropdown-menu">
                         <li><i class="fa fa-list"></i><a href="/list/item">Daftar Barang</a></li>
+                        <li><i class="fa fa-list"></i><a href="/list/order">Order Barang</a></li>
                     </ul>
                 </li>
                 
                 {{if eq .role "Owner"}}
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-inbox"></i>Supplier</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li><i class="fa fa-list"></i><a href="/list/supplier">Daftar Supplier</a></li>
+                    </ul>
+                </li>
+
                 <li class="menu-item-has-children dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-inbox"></i>Toko</a>
                     <ul class="sub-menu children dropdown-menu">
