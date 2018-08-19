@@ -56,6 +56,8 @@ func list(w http.ResponseWriter, r *http.Request) {
 			list_controller.ListUser(w, r)
 		} else if types == "store" {
 			list_controller.ListStore(w, r)
+		} else if types == "member" {
+			list_controller.ListMember(w, r)
 		}
 	}
 }
