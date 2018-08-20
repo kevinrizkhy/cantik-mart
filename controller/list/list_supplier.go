@@ -14,7 +14,7 @@ func ListSupplier(w http.ResponseWriter, r *http.Request) {
 	if session_token {
 		t, _ = template.ParseFiles(
 			"view/layout.html",
-			"view/partial/table/list_items.html",
+			"view/partial/table/list_supplier.html",
 			"view/partial/base/header/header.html",
 			"view/partial/base/navbar/navbar.html",
 		)

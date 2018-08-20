@@ -29,10 +29,10 @@ url:"/edit/user",
 method: "POST",
 data: $("#form-edit").serialize(),
 success:function(response){
-openAlert("Berhasil mengubah item.", "success", "/list/user");
+openAlert("Berhasil mengubah user.", "success", "/list/user");
 },
 error:function(response){
-openAlert("Gagal mengubah item.", "danger","/list/user");
+openAlert("Gagal mengubah user.", "danger","/list/user");
 }
 });
 return false;

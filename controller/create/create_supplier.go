@@ -1,7 +1,6 @@
 package create
 
 import (
-	//"fmt"
 	database "github.com/pardev/cantik-mart/model/db"
 	sessions "github.com/pardev/cantik-mart/model/session"
 	"net/http"
@@ -16,9 +15,9 @@ func CreateSupplier(w http.ResponseWriter, r *http.Request) {
 			name := r.FormValue("name")
 			address := r.FormValue("address")
 			phone := r.FormValue("phone")
-			description := r.FormValue("description")
-			if name != "" && address != "" && phone != "" && description != "" {
-				insert_supplier_status := database.InsertSupplier(name, address, phone, description)
+			email := r.FormValue("email")
+			if name != "" && address != "" && phone != "" && email != "" {
+				insert_supplier_status := database.InsertSupplier(name, address, phone, email)
 				if insert_supplier_status {
 					w.WriteHeader(200)
 				} else {

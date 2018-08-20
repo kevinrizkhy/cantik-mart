@@ -2,8 +2,8 @@ package db
 
 import ()
 
-func UpdateOrder(id, name, supplier, note, total string) bool {
-	_, err := ExecuteQuery("UPDATE t_store SET name=$1, supplier=$2, total=$3, note=$4, WHERE id=$5;", name, supplier, total, note, id) //returning id
+func UpdateOrder(id, number, total, order_by, sent_to, note, status string) bool {
+	_, err := ExecuteQuery("UPDATE t_order SET number=$1, total=$2, order_by=$3, sent_to=$4, note=$5, status=$6 WHERE id=$7;", number, total, order_by, sent_to, note, status, id) //returning id
 	if err == nil {
 		return true
 	} else {

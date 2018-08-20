@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="/assets/css/lib/datatable/dataTables.bootstrap.min.css">
 {{if eq .role "Accounting"}}
 <script type="text/javascript">
+
 function create(){
 $("#close-modal-button").click();
 $.ajax({
@@ -17,10 +18,59 @@ openAlert("Gagal menambahkan supplier.", "danger","/list/supplier");
 });
 return false;
 }
+
+//EDIT
+function edit(){
+$("#close-modal-button-edit").click();
+if(($("#edit-phone").val()==0)||($("#edit-address").val()==0)){
+openAlert("Silakan mengisi semua bagian.", "danger","/list/supplier");
+return false;
+}else{
+$.ajax({
+url:"/edit/supplier",
+method: "POST",
+data: $("#form-edit").serialize(),
+success:function(response){
+openAlert("Berhasil mengubah supplier.", "success", "/list/supplier");
+},
+error:function(response){
+openAlert("Gagal mengubah supplier.", "danger","/list/supplier");
+}
+});
+return false;
+}
+}
+//
+function editSupplier(rows){
+id = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(0).innerHTML;
+name = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(1).innerHTML;
+address = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(2).innerHTML;
+phone = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(3).innerHTML;
+email = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(4).innerHTML;
+status = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(5).innerHTML;
+$("#edit-id").val(id);
+$("#edit-name").val(name);
+$("#edit-address").val(address);
+$("#edit-phone").val(phone);
+$("#edit-email").val(email);
+var ff = document.getElementById('edit-status');
+for (var i = 0; i < ff.options.length; i++) {
+if (ff.options[i].text === status) {
+ff.selectedIndex = i;
+break;
+}
+}
+$("#button-edit-supplier").click();
+}
+
+
 </script>
 <button type="button" class="btn btn-secondary mb-1" data-toggle="modal" data-target="#create-supplier">
 Tambah
 </button>
+<button type="button" class="btn btn-secondary mb-1" data-toggle="modal" data-target="#edit-supplier" id="button-edit-supplier" style="display: none;" hidden></button>
+<!-- MODAL -->
+<!-- CREATE -->
 <div class="modal fade" id="create-supplier" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -38,7 +88,7 @@ Tambah
                                 <form onsubmit="return create()" method="post" id="form-create">
                                     <div class="form-group has-success">
                                         <label for="cc-name" class="control-label mb-1">Nama</label>
-                                        <input id="cc-name" name="name" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="nama" required>
+                                        <input id="name" name="name" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="nama" required>
                                         <span class="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
                                     </div>
                                     
@@ -50,15 +100,15 @@ Tambah
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="x_card_code" class="control-label mb-1">No Telpon </label>
+                                        <label for="x_card_code" class="control-label mb-1">No Telpon</label>
                                         <div class="input-group">
                                             <input id="phone" name="phone" type="tel" class="form-control cc-cvc" value="" data-val="true" data-val-required="Please enter the security code" data-val-cc-cvc="Please enter a valid security code" autocomplete="off" placeholder="0812345678" >
                                         </div>
                                     </div>
                                     
                                     <div class="form-group">
-                                        <label for="cc-number" class="control-label mb-1">Deskripsi</label>
-                                        <input id="description" name="description" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="email" required>
+                                        <label for="cc-number" class="control-label mb-1">Email</label>
+                                        <input id="email" name="email" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="email" required>
                                         <span class="help-block" data-valmsg-for="cc-number" data-valmsg-replace="true"></span>
                                     </div>
 
@@ -67,6 +117,76 @@ Tambah
                                         <i class="fa fa-lock fa-lg"></i>&nbsp;
                                         <span id="payment-button-amount">Tambah</span>
                                         <span id="payment-button-sending" style="display:none;">Menambahkan…</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- EDIT -->
+<div class="modal fade" id="edit-supplier" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">Ubah Supplier</strong>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                        <span aria-hidden="true" id="close-modal-button-edit">&times;</span>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="pay-invoice">
+                            <div class="card-body">
+                                <form onsubmit="return edit()" method="post" id="form-edit">
+                                    <div class="form-group has-success">
+                                        <label for="cc-name" class="control-label mb-1">ID</label>
+                                        <input id="edit-id" name="id" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="nama" required readonly>
+                                        <span class="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
+                                    </div>
+                                    <div class="form-group has-success">
+                                        <label for="cc-name" class="control-label mb-1">Nama</label>
+                                        <input id="edit-name" name="name" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="nama" required>
+                                        <span class="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="cc-exp" class="control-label mb-1">Alamat </label>
+                                        <input id="edit-address" name="address" type="text" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="alamat" autocomplete="cc-exp" required>
+                                        <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="x_card_code" class="control-label mb-1">No Handphone </label>
+                                        <div class="input-group">
+                                            <input id="edit-phone" name="phone" type="tel" class="form-control cc-cvc" value="" data-val="true" data-val-required="Please enter the security code" data-val-cc-cvc="Please enter a valid security code" autocomplete="off" placeholder="0812345678" >
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="cc-number" class="control-label mb-1">Email</label>
+                                        <input id="edit-email" name="email" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="email" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="email" required>
+                                        <span class="help-block" data-valmsg-for="cc-number" data-valmsg-replace="true"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="cc-exp" class="control-label mb-1">Status</label>
+                                        <select name="status" id="edit-status" class="form-control-sm form-control" style="font-weight: bold;" required>
+                                            <option value="true" style="font-weight: bold;color: green;"> Aktif </option>
+                                            <option value="false" style="font-weight: bold;color: red;"> Tidak Aktif </option>
+                                        </select>
+                                        <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                                    </div>
+
+                                    <div>
+                                        <button id="edit-button" type="submit" class="btn btn-lg btn-info btn-block">
+                                        <i class="fa fa-lock fa-lg"></i>&nbsp;
+                                        <span id="payment-button-amount">Ubah</span>
+                                        <span id="payment-button-sending" style="display:none;">Mengubah...</span>
                                         </button>
                                     </div>
                                 </form>
@@ -95,7 +215,8 @@ Tambah
                                     <th>Nama</th>
                                     <th>Alamat</th>
                                     <th>No Telpon</th>
-                                    <th>Deskripsi</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -106,7 +227,8 @@ Tambah
                             <th style="display: none;">Nama</th>
                             <th style="display: none;">Alamat</th>
                             <th style="display: none;">No Telpon</th>
-                            <th style="display: none;">Deskripsi</th>
+                            <th style="display: none;">Email</th>
+                            <th>Status</th>
                             <th style="display: none;">Action</th>
                         </tr>
                         </tfoot>
@@ -135,7 +257,7 @@ data: {{.list_supplier}},
 "scrollY": 400,
 destroy: true,
 "scrollX": true,
-columns:[{title:"Id"},{title:"Name"},{title:"Address"},{title:"Phone"},{title:"Description"},{title:"Action"}],
+columns:[{title:"Id"},{title:"Name"},{title:"Address"},{title:"Phone"},{title:"Email"},{title:"Status"},{title:"Action"}],
 initComplete: function () {
 this.api().columns().every( function () {
 var column = this;

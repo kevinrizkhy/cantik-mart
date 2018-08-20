@@ -20,14 +20,14 @@ func ListOrder(w http.ResponseWriter, r *http.Request) {
 			"view/partial/base/navbar/navbar.html",
 		)
 		data := user.GetUserDetail(id)
-		data["list_order"] = template.JS(order.GetOrder())
-		data["list_store"] = store.GetStore()
+		data["list_order"] = order.GetOrder())
+		data["list_supplier"] = user.GetSupplier()
 		//data["list_order"] = order.GetOrder()
 		//data["list_items_category"] = item.GetItemCategoryListArray()
 
 		/*data["list_user"] = template.JS(user.GetUserList())
-		data["list_supplier"] = user.GetSupplier()
-		*/
+		data["list_store"] = store.GetStore()
+		 */
 
 		t.ExecuteTemplate(w, "layout", data)
 	} else {

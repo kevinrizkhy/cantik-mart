@@ -95,6 +95,8 @@ func edit(w http.ResponseWriter, r *http.Request) {
 			update_controller.UpdateUser(w, r)
 		} else if types == "store" {
 			update_controller.UpdateStore(w, r)
+		} else if types == "supplier" {
+			update_controller.UpdateSupplier(w, r)
 		}
 	}
 }

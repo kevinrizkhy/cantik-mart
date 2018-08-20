@@ -1,13 +1,10 @@
 package create
 
 import (
-	//"fmt"
 	database "github.com/pardev/cantik-mart/model/db"
 	sessions "github.com/pardev/cantik-mart/model/session"
 	"net/http"
 )
-
-//var t *template.Template
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
 	msg := ""
