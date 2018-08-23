@@ -13,13 +13,13 @@ func UpdateOrder(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "POST" {
 			id := r.FormValue("id")
 			number := r.FormValue("number")
-			total := r.FormValue("total")
 			order_by := r.FormValue("order_by")
-			sent_to := r.FormValue("sent_to")
+			order_to := r.FormValue("order_to")
+			total := r.FormValue("total")
 			note := r.FormValue("note")
 			status := r.FormValue("status")
-			if id != "" && number != "" && total != "" && order_by != "" && sent_to != "" && status != "" && note != "" {
-				update_store_status := database.UpdateOrder(id, number, total, order_by, sent_to, note, status)
+			if id != "" && number != "" && total != "" && order_by != "" && order_to != "" && status != "" && note != "" {
+				update_store_status := database.UpdateOrder(id, number, order_by, order_to, total, note, status)
 				if update_store_status {
 					w.WriteHeader(200)
 				} else {

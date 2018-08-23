@@ -1,7 +1,6 @@
 package list
 
 import (
-	"fmt"
 	sessions "github.com/pardev/cantik-mart/model/session"
 	supplier "github.com/pardev/cantik-mart/model/supplier"
 	user "github.com/pardev/cantik-mart/model/user"
@@ -20,7 +19,7 @@ func ListSupplier(w http.ResponseWriter, r *http.Request) {
 		)
 		data := user.GetUserDetail(id)
 		data["list_supplier"] = template.JS(supplier.GetSupplierList())
-		fmt.Println(data)
+		//fmt.Println(data)
 		t.ExecuteTemplate(w, "layout", data)
 	} else {
 		http.Redirect(w, r, "/login", 302)

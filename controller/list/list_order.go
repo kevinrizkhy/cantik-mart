@@ -15,13 +15,13 @@ func ListOrder(w http.ResponseWriter, r *http.Request) {
 	if session_token {
 		t, _ = template.ParseFiles(
 			"view/layout.html",
-			"view/partial/table/list_store.html",
+			"view/partial/table/list_order.html",
 			"view/partial/base/header/header.html",
 			"view/partial/base/navbar/navbar.html",
 		)
 		data := user.GetUserDetail(id)
-		data["list_order"] = order.GetOrder()
-		//data["list_supplier"] = user.GetSupplier()
+		data["list_order"] = template.JS(order.GetOrder())
+		//data["list_supplier"] = template.JS(supplier.GetSupplierList())
 		//data["list_order"] = order.GetOrder()
 		//data["list_items_category"] = item.GetItemCategoryListArray()
 
