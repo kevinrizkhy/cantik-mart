@@ -3,6 +3,8 @@ package router
 import (
 	//"fmt"
 	"github.com/gorilla/mux"
+	api_controller "github.com/pardev/cantik-mart/controller/api"
+	cashier_controller "github.com/pardev/cantik-mart/controller/cashier"
 	create_controller "github.com/pardev/cantik-mart/controller/create"
 	home_controller "github.com/pardev/cantik-mart/controller/home"
 	list_controller "github.com/pardev/cantik-mart/controller/list"
@@ -19,7 +21,11 @@ func Routes(addr string) {
 	r.HandleFunc("/logout", logout)
 	r.HandleFunc("/sign", sign)
 
+	r.HandleFunc("/cashier", cashier)
+
 	r.HandleFunc("/list/{type}", list)
+
+	r.HandleFunc("/api/{type}", api)
 
 	r.HandleFunc("/create/{type}", create)
 	r.HandleFunc("/edit/{type}", edit)
@@ -44,6 +50,20 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 func sign(w http.ResponseWriter, r *http.Request) {
 	sign_controller.SignIn(w, r)
+}
+
+func cashier(w http.ResponseWriter, r *http.Request) {
+	cashier_controller.Transaction(w, r)
+}
+
+func api(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	types := vars["type"]
+	if types != "" {
+		if types == "item" {
+			api_controller.GetItem(w, r)
+		}
+	}
 }
 
 func list(w http.ResponseWriter, r *http.Request) {
