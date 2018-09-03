@@ -43,3 +43,19 @@ func GetSupplierList() string {
 		return js_str
 	}
 }
+
+func GetSupplier() [][]string {
+	rows := GetSupplierListMap()
+	var result [][]string
+	if rows == nil {
+		return result
+	} else {
+		for i := 0; i < len(rows); i++ {
+			id := fmt.Sprint(rows[i]["id"])
+			name := fmt.Sprint(rows[i]["name"])
+			temp := []string{id, name}
+			result = append(result, temp)
+		}
+		return result
+	}
+}

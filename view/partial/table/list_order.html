@@ -46,42 +46,82 @@ return false;
 }
 //
 
-//
+/*//
 function editOrder(rows){
 id = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(0).innerHTML;
-name = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(1).innerHTML;
-category = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(2).innerHTML;
-buy = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(3).innerHTML;
-sell = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(4).innerHTML;
-margin = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(5).innerHTML;
-description = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(6).innerHTML;
-$("#edit-id").val(id);
-$("#edit-name").val(name);
-$("#edit-buy").val(buy);
-$("#edit-sell").val(sell);
-$("#edit-margin").val(margin);
-$("#edit-description").val(description);
-var dd = document.getElementById('edit-cat');
+number = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(1).innerHTML;
+$("#edit-order_to").val(order_to);
+$("#edit-note").val(note);
+    
+var dd = document.getElementById('edit-status');
 for (var i = 0; i < dd.options.length; i++) {
 if (dd.options[i].text === category) {
 dd.selectedIndex = i;
 break;
 }
 }
-$("#button-edit-item").click();
-}
+$("#button-edit-order").click();
+}*/
 
 //
-function detailItem(rows){
+/*function detailItem(rows){
 id = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(0).innerHTML;
-}
+}*/
+
+var table = document.getElementById("orderlist");
+    function addRows(){
+        var name = document.getElementById("name").value;
+        var cat = document.getElementById("cat").value;
+        var price = document.getElementById("price").value;
+        var qty = document.getElementById("qty").value;
+
+        var rows = table.rows.length;
+
+        var row = table.insertRow(rows);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4)
+
+        cell1.innerHTML = name
+        cell2.innerHTML = cat
+        cell3.innerHTML = price
+        cell4.innerHTML = qty
+        cell5.innerHTML = '<button onclick="removeRow(this)">Hapus</button>'
+
+    }
+
+    function removeRow(idx){
+        row_idx = idx.parentElement.parentElement.rowIndex;
+
+        table.deleteRow(row_idx);
+
+    }
+
 </script>
+<style>
+        table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+        td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        }
+        tr:nth-child(even) {
+        background-color: #dddddd;
+        }
+</style>
 <button type="button" class="btn btn-secondary mb-1" data-toggle="modal" data-target="#create-order">
 Tambah
 </button>
 <button type="button" class="btn btn-secondary mb-1" data-toggle="modal" data-target="#edit-order" id="button-edit-order" style="display: none;" hidden></button>
 
-<!-- CREATE MODAL FORM -->
+<!-- MODAL -->
+<!-- CREATE -->
 <div class="modal fade" id="create-order" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -97,59 +137,69 @@ Tambah
                         <div id="pay-invoice">
                             <div class="card-body">
                                 <form onsubmit="return create()" method="post" id="form-create">
-                                    <div class="form-group">
-                                        <label for="cc-payment" class="control-label mb-1">ID</label>
-                                        <input id="cc-pament" name="id" type="text" class="form-control" aria-required="true" aria-invalid="false" placeholder="ABCDE12345" required>
-                                    </div>
                                     <div class="form-group has-success">
-                                        <label for="cc-name" class="control-label mb-1">Nama Barang</label>
-                                        <input id="cc-name" name="name" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="nama barang" required>
+                                        <label for="cc-name" class="control-label mb-1">Nomor PO</label>
+                                        <input id="number" name="number" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="Contoh PO : PO-01" required>
                                         <span class="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
                                     </div>
-
-                                    <!-- <div class="form-group">
-                                        <label for="cc-number" class="control-label mb-1">Kategori</label>
-                                        <select name="category" id="SelectLm" class="form-control-sm form-control" required>
-                                            <option value="0" style="text-align: center;"> - Pilih Kategori - </option>
-                                            {{ range $idx,$i := .list_order }}
-                                            <option value="{{index $.list_order $idx 0}}">{{index $.list_items_category $idx 1}}</option>
+                                    
+                                    
+                                    <div class="form-group">
+                                        <label for="cc-exp" class="control-label mb-1">Dikirim Kepada</label>
+                                        <select name="supplier" id="SelectSupplier" class="form-control-sm form-control" required>
+                                            <option value="0" style="text-align: center;"> - Pilih Supplier - </option>
+                                            {{ range $idx,$i := .list_supplier }}
+                                            <option value="{{index $.list_supplier $idx 0}}">{{index $.list_supplier $idx 1}}</option>
                                             {{end}}
                                         </select>
-                                        <span class="help-block" data-valmsg-for="cc-number" data-valmsg-replace="true"></span>
-                                    </div> -->
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <div class="form-group">
-                                                <label for="cc-exp" class="control-label mb-1">Beli</label>
-                                                <input id="buy" name="buy" type="number" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="123456789" autocomplete="cc-exp" onkeyup="buyOnKeyUp()" required>
-                                                <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-1">
-                                            +
-                                        </div>
-                                        <div class="col-2">
-                                            <label for="x_card_code" class="control-label mb-1">Margin (%)</label>
-                                            <div class="input-group">
-                                                <input id="margin" name="margin" type="number" class="form-control cc-cvc" value="" data-val="true" data-val-required="Please enter the security code" data-val-cc-cvc="Please enter a valid security code" autocomplete="off" placeholder="50" onkeyup="marginOnKeyUp()" step='0.01' min="0.00" max="100">
-                                            </div>
-                                        </div>
-                                        <div class="col-1">
-                                            =
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="form-group">
-                                                <label for="cc-exp" class="control-label mb-1">Jual</label>
-                                                <input id="sell" name="sell" type="number" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="123456789" autocomplete="cc-exp" required onkeyup="sellOnKeyUp()">
-                                                <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="x_card_code" class="control-label mb-1">Keterangan</label>
-                                        <textarea name="description" id="description" rows="9" placeholder="Keterangan... (Isi Jika Perlu)" class="form-control" style="margin-top: 0px; margin-bottom: 0px; height: 182px;"></textarea>
                                         <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
                                     </div>
+
+                                   
+
+                                    <div class="form-group">
+                                        <label for="cc-exp" class="control-label mb-1">Barang yang akan dipesan</label>
+                                         <fieldset>
+                                            <!-- <legend>Input Barang</legend> -->
+                                            Nama Barang
+                                            <input type="text" id="name" value="" placeholder="">
+                                            <!-- <br>
+                                            Kategori
+                                            <input type="text" id="cat" value="" placeholder="">
+                                            <br>
+                                            Jumlah
+                                            <input type="number" id="qty" value="" placeholder="" min="1">
+                                            <br>
+                                            Harga
+                                            <input type="number" id="price" value="" min="100" placeholder="">
+                                            <br> -->
+                                            <button onclick="addRows()">Tambah</button>
+                                        </fieldset>
+                                        <br>
+                                        <h3>Detail Barang</h3>
+                                        <table id="orderlist">
+                                            <thead>
+                                                <tr>
+                                                    <td>Produk</td>
+                                                    <td>Kategori</td>
+                                                    <td>Jumlah</td>
+                                                    <td>Perkiraan Harga</td>
+                                                    <td>Aksi</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                         </table>
+
+                                        
+                                        <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="cc-number" class="control-label mb-1">Catatan</label>
+                                        <input id="catatan" name="catatan" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="catatan order" required>
+                                        <span class="help-block" data-valmsg-for="cc-number" data-valmsg-replace="true"></span>
+                                    </div>
+
                                     <div>
                                         <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
                                         <i class="fa fa-lock fa-lg"></i>&nbsp;
@@ -166,81 +216,60 @@ Tambah
         </div>
     </div>
 </div>
-<!-- EDIT MODAL FORM -->
-<div class="modal fade" id="edit-item" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true" >
+<!-- EDIT -->
+<div class="modal fade" id="edit-order" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <div class="card">
                     <div class="card-header">
-                        <strong class="card-title">Edit Item</strong>
+                        <strong class="card-title">Ubah Order</strong>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
                         <span aria-hidden="true" id="close-modal-button-edit">&times;</span>
                         </button>
                     </div>
                     <div class="card-body">
-                        <!-- Credit Card -->
                         <div id="pay-invoice">
                             <div class="card-body">
-                                <!-- <div class="card-title">
-                                    <h3 class="text-center">Pay Invoice</h3>
-                                </div>
-                                <hr>-->
                                 <form onsubmit="return edit()" method="post" id="form-edit">
-                                    <div class="form-group">
-                                        <label for="cc-payment" class="control-label mb-1">ID</label>
-                                        <input id="edit-id" name="id" type="text" class="form-control" aria-required="true" aria-invalid="false" placeholder="ABCDE12345" required readonly>
-                                    </div>
                                     <div class="form-group has-success">
-                                        <label for="cc-name" class="control-label mb-1">Nama Barang</label>
-                                        <input id="edit-name" name="name" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="nama barang" required>
+                                        <label for="cc-name" class="control-label mb-1">Id</label>
+                                        <input id="edit-id" name="id" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="id" required readonly>
                                         <span class="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
                                     </div>
+                                    
                                     <div class="form-group">
-                                        <label for="cc-number" class="control-label mb-1">Kategori</label>
-                                        <select name="category" id="edit-cat" class="form-control-sm form-control" required>
-                                            <option value="0" style="text-align: center;" disabled selected> - Pilih Kategori - </option>
-                                            {{ range $idx,$i := .list_items_category }}
-                                            <option value="{{index $.list_items_category $idx 0}}">{{index $.list_items_category $idx 1}}</option>
-                                            {{end}}
+                                        <label for="cc-exp" class="control-label mb-1">Dikirim Oleh </label>
+                                        <input id="edit-order_by" name="order_by" type="text" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="alamat" autocomplete="cc-exp" required>
+                                        <span class="help-block field-validation-valid" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="x_card_code" class="control-label mb-1">Dikirim Kepada </label>
+                                        <div class="input-group">
+                                            <input id="edit-order_to" name="order_to" type="tel" class="form-control cc-cvc" value="" data-val="true" data-val-required="Please enter the security code" data-val-cc-cvc="Please enter a valid security code" autocomplete="off" placeholder="0812345678" >
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="cc-number" class="control-label mb-1">Status</label>
+                                         <select name="status" id="edit-status" class="form-control-sm form-control" style="font-weight: bold;" required>
+                                            <option value="1" style="font-weight: bold;color: blue;"> Order sedang diproses </option>
+                                            <option value="2" style="font-weight: bold;color: orange;"> Dalam Pengiriman </option>
+                                            <option value="3" style="font-weight: bold;color: red;"> Pemeriksaan sedang berlangsung </option>
+                                            <option value="4" style="font-weight: bold;color: green;"> Selesai </option>
                                         </select>
                                         <span class="help-block" data-valmsg-for="cc-number" data-valmsg-replace="true"></span>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <div class="form-group">
-                                                <label for="cc-exp" class="control-label mb-1">Beli</label>
-                                                <input id="edit-buy" name="buy" type="number" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="123456789" autocomplete="cc-exp" onkeyup="buyEditOnKeyUp()" required>
-                                                <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-1">
-                                            +
-                                        </div>
-                                        <div class="col-2">
-                                            <label for="x_card_code" class="control-label mb-1">Margin (%)</label>
-                                            <div class="input-group">
-                                                <input id="edit-margin" name="margin" type="number" class="form-control cc-cvc" value="" data-val="true" data-val-required="Please enter the security code" data-val-cc-cvc="Please enter a valid security code" autocomplete="off" placeholder="50" onkeyup="marginEditOnKeyUp()" step='0.01' min="0.00" max="100">
-                                            </div>
-                                        </div>
-                                        <div class="col-1">
-                                            =
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="form-group">
-                                                <label for="cc-exp" class="control-label mb-1">Jual</label>
-                                                <input id="edit-sell" name="sell" type="number" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="123456789" autocomplete="cc-exp" required onkeyup="sellEditOnKeyUp()">
-                                                <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                     <div class="form-group">
-                                        <label for="x_card_code" class="control-label mb-1">Keterangan</label>
-                                        <textarea name="description" id="edit-description" rows="9" placeholder="Keterangan... (Isi Jika Perlu)" class="form-control" style="margin-top: 0px; margin-bottom: 0px; height: 182px;"></textarea>
+                                        <label for="cc-exp" class="control-label mb-1">Catatan</label>
+                                        <input id="edit-note" name="note" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="email" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="email" required>
                                         <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
                                     </div>
+
                                     <div>
-                                        <button id="payment-button" type="submit" class="btn btn-lg btn-warning btn-block">
+                                        <button id="edit-button" type="submit" class="btn btn-lg btn-info btn-block">
                                         <i class="fa fa-lock fa-lg"></i>&nbsp;
                                         <span id="payment-button-amount">Ubah</span>
                                         <span id="payment-button-sending" style="display:none;">Mengubah...</span>
@@ -255,61 +284,7 @@ Tambah
         </div>
     </div>
 </div>
-<!-- DELETE MODAL FORM -->
-<div class="modal fade" id="delete-item" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true" >
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="card">
-                    <div class="card-header">
-                        <strong class="card-title">Hapus Item</strong>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
-                        <span aria-hidden="true" id="close-modal-button-delete">&times;</span>
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <!-- Credit Card -->
-                        <div id="pay-invoice">
-                            <div class="card-body">
-                                <!-- <div class="card-title">
-                                    <h3 class="text-center">Pay Invoice</h3>
-                                </div>
-                                <hr>-->
-                                <form onsubmit="return deletes()" method="post" id="form-delete">
-                                    <div class="form-group">
-                                        <label for="cc-payment" class="control-label mb-1">ID</label>
-                                        <input id="delete-id" name="id" type="text" class="form-control" aria-required="true" aria-invalid="false" placeholder="ABCDE12345" required readonly>
-                                    </div>
-                                    <div class="form-group has-success">
-                                        <label for="cc-name" class="control-label mb-1">Nama Barang</label>
-                                        <input id="delete-name" name="name" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="nama barang" required readonly>
-                                        <span class="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="cc-number" class="control-label mb-1">Kategori</label>
-                                        <select name="category" id="delete-cat" class="form-control-sm form-control" required readonly>
-                                            {{ range $idx,$i := .list_items_category }}
-                                            <option value="{{index $.list_items_category $idx 0}}">{{index $.list_items_category $idx 1}}</option>
-                                            {{end}}
-                                        </select>
-                                        <span class="help-block" data-valmsg-for="cc-number" data-valmsg-replace="true"></span>
-                                    </div>
-                                    <div>
-                                        <button id="payment-button" type="submit" class="btn btn-lg btn-danger btn-block">
-                                        <i class="fa fa-lock fa-lg"></i>&nbsp;
-                                        <span id="payment-button-amount">Hapus</span>
-                                        <span id="payment-button-sending" style="display:none;">Menghapus...</span>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 {{end}}
 <div class="content mt-3">
     <div class="animated fadeIn">
@@ -324,20 +299,25 @@ Tambah
                             <thead>
                                 <tr>
                                     <th>Id</th>
-                                    <th>Nama</th>
-                                    <th>Supplier</th>
+                                    <th>Number</th>
+                                    <th>Order_by</th>
+                                    <th>Order_to</th>
                                     <th>Total</th>
                                     <th>Catatan</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                         <tbody></tbody>
                         <tfoot>
                         <tr>
-                            
-                            <th style="display: none;">Nama</th>
-                            <th>Supplier</th>
-                            <th style="display: none;">Action</th>
+                            <th style="display: none;">Id</th>
+                            <th style="display: none;">Number</th>
+                            <th>Order_by</th>
+                            <th>Order_to</th>
+                            <th style="display: none;">Total</th>
+                            <th style="display: none;">Catatan</th>
+                            <th style="display: none;">Status</th>
                         </tr>
                         </tfoot>
                     </table>
@@ -365,7 +345,7 @@ data: {{.list_order}},
 "scrollY": 400, 
 destroy: true,
 "scrollX": true,
-columns:[{title:"Id"},{title:"Name"},{title:"Supplier"},{title:"Total"},{title:"Catatan"}],
+columns:[{title:"Id"},{title:"Number"},{title:"Order_by"},{title:"Order_to"},{title:"Total"},{title:"Catatan"},{title:"Status"},{title:"Action"}],
 initComplete: function () {
 this.api().columns().every( function () {
 var column = this;

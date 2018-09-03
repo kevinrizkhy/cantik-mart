@@ -15,10 +15,10 @@ func CreateOrder(w http.ResponseWriter, r *http.Request) {
 			number := r.FormValue("number")
 			total := r.FormValue("total")
 			order_by := r.FormValue("order_by")
-			sent_to := r.FormValue("sent_to")
+			order_to := r.FormValue("order_to")
 			note := r.FormValue("note")
-			if number != "" && total != "" && order_by != "" && sent_to != "" && note != "" {
-				insert_order_status := database.InsertOrder(number, total, order_by, sent_to, note)
+			if number != "" && total != "" && order_by != "" && order_to != "" && note != "" {
+				insert_order_status := database.InsertOrder(number, order_by, order_to, total, note)
 				if insert_order_status {
 					w.WriteHeader(200)
 				} else {

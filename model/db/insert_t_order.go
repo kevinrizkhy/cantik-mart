@@ -2,8 +2,8 @@ package db
 
 import ()
 
-func InsertOrder(number, total, order_by, sent_to, note string) bool {
-	_, err := ExecuteQuery("INSERT INTO t_order(number, total, order_by, sent_to, note) VALUES ($1,$2,$3,$4,$5);", number, total, order_by, sent_to, note) //returning id
+func InsertOrder(number, order_by, order_to, total, note string) bool {
+	_, err := ExecuteQuery("INSERT INTO t_order(number, order_by, order_to, total, note) VALUES ($1,$2,$3,$4,$5);", number, order_by, order_to, total, note) //returning id
 	if err == nil {
 		return true
 	} else {
