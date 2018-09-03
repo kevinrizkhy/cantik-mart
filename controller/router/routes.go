@@ -60,6 +60,8 @@ func list(w http.ResponseWriter, r *http.Request) {
 			list_controller.ListMember(w, r)
 		} else if types == "order" {
 			list_controller.ListOrder(w, r)
+			/*} else if types == "orderItem" {
+			list_controller.ListOrderItem(w, r)*/
 		} else if types == "supplier" {
 			list_controller.ListSupplier(w, r)
 		}

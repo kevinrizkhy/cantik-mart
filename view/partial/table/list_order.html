@@ -68,22 +68,53 @@ $("#button-edit-order").click();
 id = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(0).innerHTML;
 }*/
 
-function addFields(){
-            var number = document.getElementById("SelectItem").value;
-            var container = document.getElementById("container");
-            while (container.hasChildNodes()) {
-                container.removeChild(container.lastChild);
-            }
-            for (i=0;i<number;i++){
-                container.appendChild(document.createTextNode("Item " + (i+1)));
-                var input = document.createElement("input");
-                input.type = "option";
-                container.appendChild(input);
-                container.appendChild(document.createElement("br"));
-            }
-        }
+var table = document.getElementById("orderlist");
+    function addRows(){
+        var name = document.getElementById("name").value;
+        var cat = document.getElementById("cat").value;
+        var price = document.getElementById("price").value;
+        var qty = document.getElementById("qty").value;
+
+        var rows = table.rows.length;
+
+        var row = table.insertRow(rows);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4)
+
+        cell1.innerHTML = name
+        cell2.innerHTML = cat
+        cell3.innerHTML = price
+        cell4.innerHTML = qty
+        cell5.innerHTML = '<button onclick="removeRow(this)">Hapus</button>'
+
+    }
+
+    function removeRow(idx){
+        row_idx = idx.parentElement.parentElement.rowIndex;
+
+        table.deleteRow(row_idx);
+
+    }
 
 </script>
+<style>
+        table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+        td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        }
+        tr:nth-child(even) {
+        background-color: #dddddd;
+        }
+</style>
 <button type="button" class="btn btn-secondary mb-1" data-toggle="modal" data-target="#create-order">
 Tambah
 </button>
@@ -124,21 +155,42 @@ Tambah
                                         <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
                                     </div>
 
-
                                    
 
                                     <div class="form-group">
                                         <label for="cc-exp" class="control-label mb-1">Barang yang akan dipesan</label>
-                                         <input type="text" id="SelectItem" name="item" value="">Jumlah Barang : (max. 10)<br />
-                                    <a href="#" id="filldetails" onclick="addFields()">Tambah Barang</a>
-                                        <div id="container"/>
+                                         <fieldset>
+                                            <!-- <legend>Input Barang</legend> -->
+                                            Nama Barang
+                                            <input type="text" id="name" value="" placeholder="">
+                                            <!-- <br>
+                                            Kategori
+                                            <input type="text" id="cat" value="" placeholder="">
+                                            <br>
+                                            Jumlah
+                                            <input type="number" id="qty" value="" placeholder="" min="1">
+                                            <br>
+                                            Harga
+                                            <input type="number" id="price" value="" min="100" placeholder="">
+                                            <br> -->
+                                            <button onclick="addRows()">Tambah</button>
+                                        </fieldset>
+                                        <br>
+                                        <h3>Detail Barang</h3>
+                                        <table id="orderlist">
+                                            <thead>
+                                                <tr>
+                                                    <td>Produk</td>
+                                                    <td>Kategori</td>
+                                                    <td>Jumlah</td>
+                                                    <td>Perkiraan Harga</td>
+                                                    <td>Aksi</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                         </table>
 
-                                        <!-- <select name="item" id="SelectItem" class="form-control-sm form-control" required>
-                                            <option value="0" style="text-align: center;"> - Pilih Barang - </option>
-                                            {{ range $idx,$i := .list_item }}
-                                            <option value="{{index $.list_item $idx 0}}">{{index $.list_item $idx 1}}</option>
-                                            {{end}}
-                                        </select> -->
+                                        
                                         <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
                                     </div>
 

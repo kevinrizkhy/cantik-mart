@@ -22,6 +22,7 @@ func ListOrder(w http.ResponseWriter, r *http.Request) {
 		)
 		data := user.GetUserDetail(id)
 		data["list_order"] = template.JS(order.GetOrder())
+		data["list_order_item"] = template.JS(order.GetOrderItem())
 		data["list_items"] = template.JS(item.GetItemList())
 		data["list_supplier"] = supplier.GetSupplier()
 		//data["list_items_category"] = item.GetItemCategoryListArray()
