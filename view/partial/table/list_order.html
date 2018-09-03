@@ -67,6 +67,22 @@ $("#button-edit-order").click();
 /*function detailItem(rows){
 id = document.getElementById("bootstrap-data-table").rows[rows.parentElement.parentElement.rowIndex].cells.item(0).innerHTML;
 }*/
+
+function addFields(){
+            var number = document.getElementById("SelectItem").value;
+            var container = document.getElementById("container");
+            while (container.hasChildNodes()) {
+                container.removeChild(container.lastChild);
+            }
+            for (i=0;i<number;i++){
+                container.appendChild(document.createTextNode("Item " + (i+1)));
+                var input = document.createElement("input");
+                input.type = "option";
+                container.appendChild(input);
+                container.appendChild(document.createElement("br"));
+            }
+        }
+
 </script>
 <button type="button" class="btn btn-secondary mb-1" data-toggle="modal" data-target="#create-order">
 Tambah
@@ -107,7 +123,25 @@ Tambah
                                         </select>
                                         <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
                                     </div>
-                                    
+
+
+                                   
+
+                                    <div class="form-group">
+                                        <label for="cc-exp" class="control-label mb-1">Barang yang akan dipesan</label>
+                                         <input type="text" id="SelectItem" name="item" value="">Jumlah Barang : (max. 10)<br />
+                                    <a href="#" id="filldetails" onclick="addFields()">Tambah Barang</a>
+                                        <div id="container"/>
+
+                                        <!-- <select name="item" id="SelectItem" class="form-control-sm form-control" required>
+                                            <option value="0" style="text-align: center;"> - Pilih Barang - </option>
+                                            {{ range $idx,$i := .list_item }}
+                                            <option value="{{index $.list_item $idx 0}}">{{index $.list_item $idx 1}}</option>
+                                            {{end}}
+                                        </select> -->
+                                        <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                                    </div>
+
                                     <div class="form-group">
                                         <label for="cc-number" class="control-label mb-1">Catatan</label>
                                         <input id="catatan" name="catatan" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" placeholder="catatan order" required>
