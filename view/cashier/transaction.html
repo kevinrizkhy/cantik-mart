@@ -1,140 +1,207 @@
 {{define "layout"}}
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Cantik Mart</title>
-		<style>
-			table {
-			    font-family: arial, sans-serif;
-			    border-collapse: collapse;
-			    width: 100%;
-			}
+   <head>
+      <title>Cantik Mart</title>
+      <style>
+         .overflow {
+            /*overflow: auto;*/
+            height: 60vh;
+         }
+         .ui.page.grid {
+              padding: 0 !important; 
+         }
+         .column {
+            height: 80vh;
+         }
+         .align-right{
+            text-align: right;
+         }
 
-			td, th {
-			    border: 1px solid #dddddd;
-			    text-align: left;
-			    padding: 8px;
-			}
+      </style>
+      <link rel='stylesheet' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css'>
+      <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+      <link rel="stylesheet" href="/assets/css/cashier.css">
+   </head>
+   <body>
+      <div class="ui grid page">
+         <div class="column">
+            <div class="ui segment">
+               <div class="ui menu top">
+                  <a class="active item" data-tab="transaction"><i class="icon edit sign"></i>TRANSAKSI</a>
+                  <a class="item" data-tab="stock">STOK</a>
+                  <a class="item" data-tab="member">MEMBER</a>
+               </div>
+               <div class="ui tab" data-tab="transaction">
+                  <div class="ui form">
+                     <div class="three fields">
+                        <div class="field">
+                           <label>KODE BARANG</label>
+                           <input type="text" placeholder="123456789" id="itemId"/>
+                        </div>
+                        <div class="field">
+                           <label>JUMLAH</label>
+                           <input type="number" value="1" min="1" id="item_qty"/>
+                        </div>
+                        <div class="field align-right">
+                           <label style="font-size: 15px;">TOTAL BELANJA</label>
+                           <label style="font-size: 40px; font-weight: 990;" id="label-total">0</label>
+                        </div>
+                     </div>
+                     <div class="one fields">
+                        <hr>
+                        <br>
+                        <div class="overflow">
+                           <table id="itemList" style="width:100%">
+                           <thead>
+                              <tr>
+                                 <th class="width10">Kode</th>
+                                 <th class="width25">Nama Barang</th>
+                                 <th class="width15">Kategori</th>
+                                 <th class="width15">Jumlah</th>
+                                 <th class="width15">Harga</th>
+                                 <th class="width15">Diskon</th>
+                                 <th class="width15">Total</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                           </tbody>
+                        </table>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="ui tab" data-tab="member">
+                  <div class="ui form">
+                     <div class="two fields">
+                        <div class="field"><label>First Name</label><input type="text" /></div>
+                        <div class="field"><label>Last Name</label><input type="text" /></div>
+                     </div>
+                  </div>
+               </div>
+               <div class="ui tab" data-tab="stock">
+                  Other content
+               </div>
+            </div>
+         </div>
+      </div>
+      <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/javascript/semantic.min.js'></script>
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.address/1.6/jquery.address.min.js'></script>
+      <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
+      <script src="/assets/js/cashier.js"></script>
+      <script type="text/javascript">
 
-			tr:nth-child(even) {
-			    background-color: #dddddd;
-			}
-		</style>
-	</head>
-	<body>
-		<fieldset>
-			<legend>Barang</legend>
-			<br>
-			KODE
-			<input type="text" name="" id="itemId" value="" placeholder="KODE BARANG" required>
-			<br>
-			JUMLAH
-			<input type="number" name="" id="item_qty" value="1" min="1" placeholder="">
-		</fieldset>
+         $(document).ready(function() {
+             $('#itemList').DataTable( {
+                 scrollY:        '45vh',
+                 scrollCollapse: true,
+                 paging:         false,
+                 pageLength: 10,
+                 paging: false,
+                 columns: [
+                   { "width": "10%" },
+                   { "width": "25%" },
+                   { "width": "15%" },
+                   { "width": "5%" },
+                   { "width": "15%" },
+                   { "width": "15%" },
+                   { "width": "15%" },
+                 ]
+             } );
+         } );
 
-		<table id="itemList">
-			<thead>
-				<tr>
-					<th>Kode</th>
-					<th>Nama Barang</th>
-					<th>Kategori</th>
-					<th>Jumlah</th>
-					<th>Harga</th>
-					<th>Total</th>
-				</tr>
-			</thead>
-			<tbody>
-			</tbody>
-		</table>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<script type="text/javascript">
-			var table = document.getElementById("itemList");
-			
+         var textInput = document.getElementById('itemId');
+         var qtyInput = document.getElementById('item_qty');
+         var timeout = null;
+         
+         qtyInput.onkeyup = function (e) {
+             clearTimeout(timeout);
+             timeout = setTimeout(function () {
+               document.getElementById("itemId").focus();
+             }, 600);
+         };
 
-			var textInput = document.getElementById('itemId');
-			// Init a timeout variable to be used below
-			var timeout = null;
+         textInput.onkeyup = function (e) {
+             clearTimeout(timeout);
+             timeout = setTimeout(function () {
+             	var item_id = document.getElementById("itemId").value;
+                 $.ajax({
+         				method: "GET",
+         				cache: false,
+         				url: "/api/item?id="+item_id, 
+         				success: function(result_arr){
+                        var table = $('#itemList').DataTable();
+         					var result = result_arr[0];         
+         					var qty = qtyInput.value;
+         					var total = parseFloat(qty) * (parseFloat(result[3])-parseFloat("100"));
+                        var dataSet = [result[0],result[1],result[2],qty,result[3],100, total];
 
-			// Listen for keystroke events
-			textInput.onkeyup = function (e) {
-
-			    // Clear the timeout if it has already been set.
-			    // This will prevent the previous task from executing
-			    // if it has been less than <MILLISECONDS>
-			    clearTimeout(timeout);
-
-			    // Make a new timeout set to go off in 800ms
-			    timeout = setTimeout(function () {
-			    	var item_id = document.getElementById("itemId").value;
-			        $.ajax({
-							method: "GET",
-							cache: false,
-							url: "/api/item?id="+item_id, 
-							success: function(result_arr){
-								var result = result_arr[0];
-								var qty = document.getElementById("item_qty").value;
-					            var rows_length = table.rows.length;
-					            var row = table.insertRow(rows_length);
-					            var cell1 = row.insertCell(0);
-								var cell2 = row.insertCell(1);
-								var cell3 = row.insertCell(2);
-								var cell4 = row.insertCell(3);
-								var cell5 = row.insertCell(4);
-								var cell6 = row.insertCell(5);
-
-								// Add some text to the new cells:
-								cell1.innerHTML = result[0];
-								cell2.innerHTML = result[1];
-								cell3.innerHTML = result[2];
-								cell4.innerHTML = ""+qty;
-								cell5.innerHTML = result[3];
-								cell6.innerHTML = parseFloat(""+qty) * parseFloat(result[3]);
-								document.getElementById("itemId").value = "";
-								document.getElementById("item_qty").value = 1;
-								document.getElementById("itemId").focus();
-				    	    },
-				    	    error: function (error) {
-							    alert("Terjadi Kesalahan")
-							}
-				    	});
-			    }, 300);
-			};
-
-			function GetItem(){
-				var item_id = document.getElementById("itemId").value
-				if (item_id.length > 10 ){
-						$.ajax({
-							method: "GET",
-							cache: false,
-							url: "/api/item?id="+item_id, 
-							success: function(result_arr){
-								var qty = document.getElementById("item_qty").value;
-								result = result_arr[0];
-								alert(result[2])
-					            var rows_length = table.rows.length;
-					            var row = table.insertRow(rows_length);
-					            var cell1 = row.insertCell(0);
-								var cell2 = row.insertCell(1);
-								var cell3 = row.insertCell(2);
-								var cell4 = row.insertCell(3);
-								var cell5 = row.insertCell(4);
-								var cell6 = row.insertCell(5);
-
-								// Add some text to the new cells:
-								cell1.innerHTML = result[0];
-								cell2.innerHTML = result[1];
-								cell3.innerHTML = result[2];
-								cell3.innerHTML = ""+qty;
-								cell4.innerHTML = result[3];
-								cell5.innerHTML = parseFloat(""+qty) * parseFloat(result[3]);
-								document.getElementById("itemId").value = "";
-								document.getElementById("item_qty").value = 1;
-								document.getElementById("itemId").focus();
-				    	    }
-				    	});
-				}
-			}
-		</script>
-	</body>
+                        table.row.add(dataSet).draw();
+         					GrandTotal();
+         
+         					document.getElementById("itemId").value = "";
+         					document.getElementById("item_qty").value = 1;
+                        document.getElementById("itemId").focus();
+         	    	    },
+         	    	    error: function (error) {
+         				    alert("Terjadi Kesalahan")
+         				}
+         	    	});
+             }, 300);
+         };
+         
+         function GrandTotal(){
+         	var total = 0
+            var table = $('#itemList').DataTable();
+            var data = table.rows().data();
+         	for (var i = 0; i < data.length; i++) {
+         		total+= parseFloat(data[i][6]);
+         	}
+         	var 	bilangan = total;
+         
+            var	reverse = bilangan.toString().split('').reverse().join(''),
+            ribuan 	= reverse.match(/\d{1,3}/g);
+            ribuan	= ribuan.join('.').split('').reverse().join('');
+         	document.getElementById("label-total").innerHTML = ribuan;
+         }
+         
+         function GetItem(){
+         	var item_id = document.getElementById("itemId").value
+         	if (item_id.length > 10 ){
+         			$.ajax({
+         				method: "GET",
+         				cache: false,
+         				url: "/api/item?id="+item_id, 
+         				success: function(result_arr){
+         					var qty = document.getElementById("item_qty").value;
+         					result = result_arr[0];
+         					alert(result[2])
+         		            var rows_length = table.rows.length;
+         		            var row = table.insertRow(rows_length);
+         		            var cell1 = row.insertCell(0);
+         					var cell2 = row.insertCell(1);
+         					var cell3 = row.insertCell(2);
+         					var cell4 = row.insertCell(3);
+         					var cell5 = row.insertCell(4);
+         					var cell6 = row.insertCell(5);
+         
+         					// Add some text to the new cells:
+         					cell1.innerHTML = result[0];
+         					cell2.innerHTML = result[1];
+         					cell3.innerHTML = result[2];
+         					cell3.innerHTML = ""+qty;
+         					cell4.innerHTML = result[3];
+         					cell5.innerHTML = parseFloat(""+qty) * parseFloat(result[3]);
+         					document.getElementById("itemId").value = "";
+         					document.getElementById("item_qty").value = 1;
+         					document.getElementById("itemId").focus();
+         	    	    }
+         	    	});
+         	}
+         }
+      </script>
+   </body>
 </html>
 {{end}}
