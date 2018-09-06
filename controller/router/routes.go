@@ -62,6 +62,10 @@ func api(w http.ResponseWriter, r *http.Request) {
 	if types != "" {
 		if types == "item" {
 			api_controller.GetItem(w, r)
+		} else if types == "item-list" {
+			api_controller.GetItemList(w, r)
+		} else if types == "member" {
+			//api_controller.GetMember(w, r)
 		}
 	}
 }
