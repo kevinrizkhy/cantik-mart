@@ -131,7 +131,10 @@ itemSearchId.onkeyup = function(e) {
                 table.clear().draw();
                 for (var i = 0; i < result_arr.length; i++) {
                     var result = result_arr[i];
-                    var dataSet = [result[0], result[1], result[2], 0, result[3]];
+                    var reverse = result[3].toString().split('').reverse().join(''),
+                    ribuan = reverse.match(/\d{1,3}/g);
+                    ribuan = ribuan.join('.').split('').reverse().join('');
+                    var dataSet = [result[0], result[1], result[2], 0, ribuan];
                     table.row.add(dataSet).draw();
                 }
             },
@@ -190,13 +193,80 @@ function GrandTotal() {
     document.getElementById("label-total").innerHTML = ribuan;
 }
 
-function CheckOut() {
-    alert(123)
-}
+var head_html = '<html> <table style="font-family: monospace; width: 100%"> <tr style="height: 2cm; " > <td valign="top"  width="70%">CANTIK MART <br> Plered, Purwakarta <br> 022 - 12345678 </td> <td style="text-align: right;" width="30%"> <img src="127.0.0.1:8080/assets/images/icon2.png" width="100%"> </td> </tr> </table><hr>';
+            var footer_html = '<hr> <table style="font-family: monospace; width: 100%"> <tr style="height: 0.3cm;"> <td valign="middle" style="text-align: center; font-size: 0.3cm;" > Powered by </td></tr><tr> <td valign="middle" style="text-align: center; font-size: 0.25cm;" >www.pardev.id</td></tr></table> </html>';
+            var body_html = '';
 
-function PrintBill() {
-    printHTML();
-}
+            function PrintBill() {
+                body_html = '';
+                body_html += '<table style="font-family: monospace;width: 100%;">';
+
+                var diskon = 0;
+                var subtotal = 0;
+                var table = $('#itemList').DataTable();
+                var data = table.rows().data();
+                for (var i = 0; i < data.length; i++) {
+                    diskon += parseFloat(data[i][3])*parseFloat(data[i][5]);
+                    subtotal += parseFloat(data[i][3])*parseFloat(data[i][4]);
+                    var reverse = data[i][6].toString().split('').reverse().join(''),
+                    ribuan = reverse.match(/\d{1,3}/g);
+                    ribuan = ribuan.join('.').split('').reverse().join('');
+
+                    reverse = data[i][4].toString().split('').reverse().join(''),
+                    satuan = reverse.match(/\d{1,3}/g);
+                    satuan = satuan.join('.').split('').reverse().join('');
+
+                    //body_html += '<tr style="height: 0.5cm;"><td valign="top" colspan="3" ><b>'+data[i][1]+'</b></td></tr>'
+                    body_html += '<tr style="height: 0.5cm;"><td valign="top" style="text-align: center;" colspan="3"><b>'+data[i][1]+'</b></td></tr>';
+                    body_html += '<tr style="height: 0.5cm;"><td valign="top" style="text-align: center;"> *'+data[i][3]+'</td><td valign="top" style="text-align: center;"> @'+satuan+' </td><td valign="top" style="text-align: right;">'+ ribuan+'</td> </tr>';
+                }
+
+                var reverse = diskon.toString().split('').reverse().join(''),
+                diskon = reverse.match(/\d{1,3}/g);
+                diskon = diskon.join('.').split('').reverse().join('');
+
+                reverse = subtotal.toString().split('').reverse().join(''),
+                sub = reverse.match(/\d{1,3}/g);
+                sub = sub.join('.').split('').reverse().join('');
+
+                var nominal = $('#label-total').html();
+                
+                var change = "0";
+
+                if ($("#payment-method-select")==1){
+                    change = $('#change-h5').html();
+                    reverse = $('#nominal').val().toString().split('').reverse().join(''),
+                    nominal = reverse.match(/\d{1,3}/g);
+                    nominal = nominal.join('.').split('').reverse().join('');
+                }
+
+                body_html += '</table>';
+                body_html += '<hr>';
+
+                body_html += '<table style="font-family: monospace; width: 100%">'
+                body_html += '<tr style="height: 0.3cm;"> <td valign="middle" style="text-align: left; font-size: 0.3cm;" > subtotal </td><td valign="middle" style="text-align: left; font-size: 0.3cm;" >:</td><td valign="middle" style="text-align: right; font-size: 0.3cm;" >'+sub+'</td></tr>';
+                body_html += '<tr style="height: 0.3cm;"> <td valign="middle" style="text-align: left; font-size: 0.3cm;" > discount </td><td valign="middle" style="text-align: left; font-size: 0.3cm;" >:</td><td valign="middle" style="text-align: right; font-size: 0.3cm;" >'+diskon+'</td></tr>';
+                body_html += '<tr style="height: 0.3cm;"> <td valign="middle" style="text-align: left; font-size: 0.3cm;" > TOTAL </td><td valign="middle" style="text-align: left; font-size: 0.3cm;" >:</td><td valign="middle" style="text-align: right; font-size: 0.3cm;" >'+$('#label-total').html()+'</td></tr>';
+                body_html += '<tr style="height: 0.3cm;"> <td valign="middle" style="text-align: left; font-size: 0.3cm;" > CASH </td><td valign="middle" style="text-align: left; font-size: 0.3cm;" >:</td><td valign="middle" style="text-align: right; font-size: 0.3cm;" >'+ nominal +'</td></tr>';
+                body_html += '<tr style="height: 0.3cm;"> <td valign="middle" style="text-align: left; font-size: 0.3cm;" > CHANGE </td><td valign="middle" style="text-align: left; font-size: 0.3cm;" >:</td><td valign="middle" style="text-align: right; font-size: 0.3cm;" >'+change+'</td></tr>';
+                body_html += '</table>';
+
+                printHTML(head_html+body_html+footer_html);
+            }           
+
+            function printHTML(html) {
+                setPrinter("zebra");
+                var config = getUpdatedConfig();
+                var printData = [
+                    {
+                        type: 'html',
+                        format: 'plain',
+                        data: html
+                    }
+                ];
+                qz.print(config, printData).catch(displayError);
+            }
+
 
 /// Authentication setup ///
 qz.security.setCertificatePromise(function(resolve, reject) {
